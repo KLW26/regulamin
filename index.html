@@ -712,6 +712,40 @@
         .btn-lang:hover { background: rgba(32,128,255,0.12); }
         .admin-mode #langToggleBtn { display: none !important; }
 
+        /* ── POGRUBIENIA W REGULAMINIE ── */
+        .reg-entry-text b, .reg-entry-preview b { color: #fff; font-weight: 700; }
+        .reg-bold-btn {
+            display: none; position: absolute; top: 6px; right: 40px; z-index: 5;
+            background: rgba(32,128,255,0.15); color: #fff; border: 1px solid rgba(32,128,255,0.4);
+            border-radius: 3px; cursor: pointer; padding: 1px 10px;
+            font-family: Georgia, 'Times New Roman', serif; font-size: 0.85rem; line-height: 1.4; transition: 0.15s;
+        }
+        .reg-bold-btn:hover { background: var(--col-blue); }
+        .admin-mode .reg-bold-btn { display: block; }
+        .admin-mode .reg-entry {
+            display: grid; grid-template-columns: 6px minmax(0, 1fr); column-gap: 12px; padding-top: 34px;
+        }
+        .admin-mode .reg-entry > .reg-entry-textarea,
+        .admin-mode .reg-entry > .reg-entry-preview { grid-column: 2; }
+        .reg-entry-preview { display: none; }
+        .admin-mode .reg-entry-preview {
+            display: block; margin-top: 6px; padding: 7px 10px;
+            border-left: 2px solid rgba(32,128,255,0.35); border-radius: 0 3px 3px 0;
+            background: rgba(0,0,0,0.22); font-size: 0.88rem; line-height: 1.5; color: var(--col-text);
+        }
+        .admin-mode .reg-entry-preview:empty { display: none; }
+        .reg-admin-hint {
+            display: none; margin-bottom: 12px; padding: 10px 14px; border-radius: 4px;
+            background: rgba(32,128,255,0.07); border: 1px solid rgba(32,128,255,0.2);
+            font-size: 0.9rem; color: var(--col-text); line-height: 1.5;
+        }
+        .admin-mode .reg-admin-hint { display: block; }
+        .reg-admin-hint code { background: rgba(0,0,0,0.35); padding: 1px 5px; border-radius: 3px; font-size: 0.85rem; }
+        .reg-admin-hint .reg-hint-b {
+            display: inline-block; padding: 0 7px; border: 1px solid rgba(32,128,255,0.4); border-radius: 3px;
+            font-family: Georgia, 'Times New Roman', serif; font-weight: 700; color: #fff; background: rgba(32,128,255,0.15);
+        }
+
         /* ── DISCORD PANEL (admin only) ── */
         .discord-panel {
             display: none;
@@ -912,6 +946,8 @@
         </div>
 
         <!-- Tab navigation -->
+        <div class="reg-admin-hint">✍ <b>Pogrubienie:</b> zaznacz fragment w polu wpisu i kliknij <span class="reg-hint-b">B</span> (albo Ctrl+B). W polu wygląda to tak: <code>**tekst**</code>, a na stronie i na Discordzie jest po prostu <b>pogrubione</b>. Pod każdym polem widać podgląd.</div>
+
         <div class="reg-tabs" id="regTabs">
             <button class="reg-tab active" onclick="handleRegTabClick(event,0)" data-tab="0"><span class="reg-tab-icon">⚠️</span><span class="reg-tab-label-display">Taryfikator</span><input class="reg-tab-label-edit" value="Taryfikator" onclick="event.stopPropagation()"><span class="reg-tab-delete" onclick="deleteRegTab(this);event.stopPropagation()">✕</span></button>
             <button class="reg-tab" onclick="handleRegTabClick(event,1)" data-tab="1"><span class="reg-tab-icon">🎮</span><span class="reg-tab-label-display">Błędy Gry</span><input class="reg-tab-label-edit" value="Błędy Gry" onclick="event.stopPropagation()"><span class="reg-tab-delete" onclick="deleteRegTab(this);event.stopPropagation()">✕</span></button>
@@ -927,38 +963,38 @@
             <!-- TAB 0: TARYFIKATOR -->
             <div class="reg-panel active" id="regPanel0">
                 <div class="reg-h3-wrap"><h3 class="reg-h3-display">Przewinienia i kary</h3><input class="reg-h3-edit" value="Przewinienia i kary"><button class="reg-delete-btn" onclick="this.closest('.reg-h3-wrap').remove()" style="position:static">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Brake check</b> (nagłe, nieuzasadnione hamowanie) <span class="reg-chip chip-time">5–20 sek.</span><span class="reg-chip chip-pk">3–5 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">Brake check (nagłe, nieuzasadnione hamowanie): kara 5–20s oraz 3–5 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Zwiększanie czasu delta podczas VSC/SC</b> <span class="reg-chip chip-time">3–5 sek.</span><span class="reg-chip chip-pk">1–5 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">Zwiększanie czasu delta podczas VSC/SC: 3–5s oraz 1–5 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Blokowanie w kwalifikacjach</b> <span class="reg-chip chip-pk">1–3 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">Blokowanie w kwalifikacjach: 1–3 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Spowodowanie kolizji</b> <span class="reg-chip chip-time">3–10 sek.</span><span class="reg-chip chip-pk">1–5 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">Spowodowanie kolizji: 3–10s oraz 1–5 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Wypychanie poza tor</b> <span class="reg-chip chip-time">3 sek.</span><span class="reg-chip chip-pk">1–3 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">Wypychanie poza tor: 3s oraz 1–3 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only"><b>Użycie funkcji „Powrót na tor"</b> <span class="reg-chip chip-dsq">DSQ</span><div class="reg-entry-sub"><div class="reg-sub-item">Nie dotyczy: gdy kierowca nie może samodzielnie kontynuować jazdy (np. zawieszenie na tarkach)</div><div class="reg-sub-item">Nie dotyczy: na okrążeniu formującym</div><div class="reg-sub-item">Nie dotyczy: w kwalifikacjach (możliwe PK lub ban na kwalifikacje)</div></div></div><textarea class="reg-entry-edit reg-entry-textarea">Użycie funkcji „Powrót na tor": DSQ. Wyjątki: niemożność kontynuowania jazdy, okrążenie formujące, kwalifikacje.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Agresywny divebomb</b> (atak z dużej odległości) <span class="reg-chip chip-time">3–10 sek.</span><span class="reg-chip chip-pk">1–6 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">Agresywny divebomb (atak z dużej odległości): 3–10s oraz 1–6 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Nierespektowanie overlapu</b> przez kierowcę z przodu <span class="reg-chip chip-pk">1–3 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">Nierespektowanie overlapu przez kierowcę będącego z przodu: 1–3 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Niebezpiecznie wolna jazda podczas restartu po SC</b> <span class="reg-chip chip-pk">1–3 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">Niebezpiecznie wolna jazda podczas restartu po SC: 1–3 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Wycofanie się z sesji na torze</b> <span class="reg-chip chip-pk">6 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">Wycofanie się z sesji na torze: 6 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only"><b>Celowe rozbicie bolidu</b> (w tym na linii mety na ostatnim okrążeniu) <span class="reg-chip chip-pk">3–8 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">Celowe rozbicie bolidu (dotyczy również linii mety na ostatnim okrążeniu): 3–8 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Próba celowego wywołania SC</b> — kara według uznania FIA</div><textarea class="reg-entry-edit reg-entry-textarea">Próba celowego wywołania SC: kara według uznania FIA</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Jazda na SI</b> <span class="reg-chip chip-pk">1–3 PK</span> lub <span class="reg-chip chip-dsq">DSQ</span> — zależnie od długości i szkodliwości naruszenia</div><textarea class="reg-entry-edit reg-entry-textarea">Jazda na SI: 1–3 PK lub DSQ (w zależności od długości i szkodliwości naruszenia)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Przecięcie linii wjazdu/zjazdu do alei serwisowej</b> jakimkolwiek kołem <span class="reg-chip chip-time">3–5 sek.</span><span class="reg-chip chip-pk">1–2 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">Przecięcie linii wjazdu lub zjazdu do alei serwisowej jakimkolwiek kołem: 3–5s oraz 1–2 PK (w zależności od szkodliwości; nie dotyczy sytuacji objętych wcześniejszą dyrektywą wyścigową)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Niebezpieczny powrót na tor</b> <span class="reg-chip chip-time">3–10 sek.</span><span class="reg-chip chip-pk">1–5 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">Niebezpieczny powrót na tor: 3–10s oraz 1–5 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Niebezpieczna zmiana linii jazdy</b> <span class="reg-chip chip-time">3–5 sek.</span><span class="reg-chip chip-pk">1–5 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">Niebezpieczna zmiana linii jazdy: 3–5s oraz 1–5 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Wyprzedzanie podczas okrążenia formującego</b> — kara według uznania FIA</div><textarea class="reg-entry-edit reg-entry-textarea">Wyprzedzanie podczas okrążenia formującego: kara według uznania FIA</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only"><b>Rozpoczęcie sesji bez zgody hosta</b> (one-shot kwalifikacje / wyścig) <span class="reg-chip chip-pk">8 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">Rozpoczęcie sesji (one-shot kwalifikacje / wyścig) bez zgody hosta: 8 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Brake check</b> (nagłe, nieuzasadnione hamowanie) <span class="reg-chip chip-time">5–20 sek.</span><span class="reg-chip chip-pk">3–5 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Brake check** (nagłe, nieuzasadnione hamowanie): kara 5–20s oraz 3–5 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Zwiększanie czasu delta podczas VSC/SC</b> <span class="reg-chip chip-time">3–5 sek.</span><span class="reg-chip chip-pk">1–5 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Zwiększanie czasu delta podczas VSC/SC**: 3–5s oraz 1–5 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Blokowanie w kwalifikacjach</b> <span class="reg-chip chip-pk">1–3 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Blokowanie w kwalifikacjach**: 1–3 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Spowodowanie kolizji</b> <span class="reg-chip chip-time">3–10 sek.</span><span class="reg-chip chip-pk">1–5 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Spowodowanie kolizji**: 3–10s oraz 1–5 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Wypychanie poza tor</b> <span class="reg-chip chip-time">3 sek.</span><span class="reg-chip chip-pk">1–3 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Wypychanie poza tor**: 3s oraz 1–3 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only"><b>Użycie funkcji „Powrót na tor"</b> <span class="reg-chip chip-dsq">DSQ</span><div class="reg-entry-sub"><div class="reg-sub-item">Nie dotyczy: gdy kierowca nie może samodzielnie kontynuować jazdy (np. zawieszenie na tarkach)</div><div class="reg-sub-item">Nie dotyczy: na okrążeniu formującym</div><div class="reg-sub-item">Nie dotyczy: w kwalifikacjach (możliwe PK lub ban na kwalifikacje)</div></div></div><textarea class="reg-entry-edit reg-entry-textarea">**Użycie funkcji „Powrót na tor"**: DSQ. Wyjątki: niemożność kontynuowania jazdy, okrążenie formujące, kwalifikacje.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Agresywny divebomb</b> (atak z dużej odległości) <span class="reg-chip chip-time">3–10 sek.</span><span class="reg-chip chip-pk">1–6 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Agresywny divebomb** (atak z dużej odległości): 3–10s oraz 1–6 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Nierespektowanie overlapu</b> przez kierowcę z przodu <span class="reg-chip chip-pk">1–3 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Nierespektowanie overlapu** przez kierowcę będącego z przodu: 1–3 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Niebezpiecznie wolna jazda podczas restartu po SC</b> <span class="reg-chip chip-pk">1–3 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Niebezpiecznie wolna jazda podczas restartu po SC**: 1–3 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Wycofanie się z sesji na torze</b> <span class="reg-chip chip-pk">6 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Wycofanie się z sesji na torze**: 6 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only"><b>Celowe rozbicie bolidu</b> (w tym na linii mety na ostatnim okrążeniu) <span class="reg-chip chip-pk">3–8 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Celowe rozbicie bolidu** (dotyczy również linii mety na ostatnim okrążeniu): 3–8 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Próba celowego wywołania SC</b> — kara według uznania FIA</div><textarea class="reg-entry-edit reg-entry-textarea">**Próba celowego wywołania SC**: kara według uznania FIA</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Jazda na SI</b> <span class="reg-chip chip-pk">1–3 PK</span> lub <span class="reg-chip chip-dsq">DSQ</span> — zależnie od długości i szkodliwości naruszenia</div><textarea class="reg-entry-edit reg-entry-textarea">**Jazda na SI**: 1–3 PK lub DSQ (w zależności od długości i szkodliwości naruszenia)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Przecięcie linii wjazdu/zjazdu do alei serwisowej</b> jakimkolwiek kołem <span class="reg-chip chip-time">3–5 sek.</span><span class="reg-chip chip-pk">1–2 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Przecięcie linii wjazdu lub zjazdu do alei serwisowej** jakimkolwiek kołem: 3–5s oraz 1–2 PK (w zależności od szkodliwości; nie dotyczy sytuacji objętych wcześniejszą dyrektywą wyścigową)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Niebezpieczny powrót na tor</b> <span class="reg-chip chip-time">3–10 sek.</span><span class="reg-chip chip-pk">1–5 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Niebezpieczny powrót na tor**: 3–10s oraz 1–5 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Niebezpieczna zmiana linii jazdy</b> <span class="reg-chip chip-time">3–5 sek.</span><span class="reg-chip chip-pk">1–5 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Niebezpieczna zmiana linii jazdy**: 3–5s oraz 1–5 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Wyprzedzanie podczas okrążenia formującego</b> — kara według uznania FIA</div><textarea class="reg-entry-edit reg-entry-textarea">**Wyprzedzanie podczas okrążenia formującego**: kara według uznania FIA</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only"><b>Rozpoczęcie sesji bez zgody hosta</b> (one-shot kwalifikacje / wyścig) <span class="reg-chip chip-pk">8 PK</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Rozpoczęcie sesji** (one-shot kwalifikacje / wyścig) **bez zgody hosta**: 8 PK</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
                 <!-- ── Przewinienia nr 23–35 (z pliku dodatkowe_przewinienia_23_35.txt) ── -->
-                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Powtarzające się przekraczanie limitów toru</b>, jeśli gra nie naliczyła kary <span class="reg-chip chip-time">3–5 sek.</span><span class="reg-chip chip-pk">1–3 PK</span> — zależnie od skali przewinienia</div><textarea class="reg-entry-edit reg-entry-textarea">Powtarzające się przekraczanie limitów toru, jeśli gra nie naliczyła kary: 3–5s oraz 1–3 PK (zależnie od skali przewinienia)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Ścięcie zakrętu</b> i uzyskanie dzięki temu przewagi <span class="reg-chip chip-time">5–10 sek.</span><span class="reg-chip chip-pk">1–3 PK</span> — obowiązek oddania pozycji, jeśli sędziowie tak zdecydują</div><textarea class="reg-entry-edit reg-entry-textarea">Ścięcie zakrętu i uzyskanie dzięki temu przewagi: 5–10s oraz 1–3 PK (obowiązek oddania pozycji, jeśli sędziowie tak zdecydują)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only"><b>Wyprzedzanie podczas SC/VSC</b> w sytuacji, gdy jest zabronione <span class="reg-chip chip-time">5–10 sek.</span><span class="reg-chip chip-pk">2–5 PK</span> — w poważnych przypadkach możliwa <span class="reg-chip chip-dsq">DSQ</span></div><textarea class="reg-entry-edit reg-entry-textarea">Wyprzedzanie podczas SC/VSC w sytuacji, gdy jest zabronione: 5–10s oraz 2–5 PK (w poważnych przypadkach możliwa DSQ)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Nierespektowanie żółtych flag</b> i brak odpowiedniego zwolnienia <span class="reg-chip chip-time">5–10 sek.</span><span class="reg-chip chip-pk">2–5 PK</span> — zależnie od zagrożenia</div><textarea class="reg-entry-edit reg-entry-textarea">Nierespektowanie żółtych flag i brak odpowiedniego zwolnienia: 5–10s oraz 2–5 PK (zależnie od zagrożenia)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Ignorowanie niebieskich flag</b> i utrudnianie bezpiecznego dublowania <span class="reg-chip chip-time">3–5 sek.</span><span class="reg-chip chip-pk">1–3 PK</span> — przy powtarzaniu przewinienia kara może wzrosnąć</div><textarea class="reg-entry-edit reg-entry-textarea">Ignorowanie niebieskich flag i utrudnianie bezpiecznego dublowania: 3–5s oraz 1–3 PK (przy powtarzaniu przewinienia kara może wzrosnąć)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Zmiana toru jazdy podczas hamowania</b>, powodująca zagrożenie lub kolizję <span class="reg-chip chip-time">5–10 sek.</span><span class="reg-chip chip-pk">2–5 PK</span> — przy poważnym incydencie możliwa dodatkowa kara</div><textarea class="reg-entry-edit reg-entry-textarea">Zmiana toru jazdy podczas hamowania, powodująca zagrożenie lub kolizję: 5–10s oraz 2–5 PK (przy poważnym incydencie możliwa dodatkowa kara)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Wielokrotna zmiana kierunku jazdy</b> w celu obrony pozycji <span class="reg-chip chip-time">3–10 sek.</span><span class="reg-chip chip-pk">1–4 PK</span> — zależnie od stopnia zagrożenia</div><textarea class="reg-entry-edit reg-entry-textarea">Wielokrotna zmiana kierunku jazdy w celu obrony pozycji: 3–10s oraz 1–4 PK (zależnie od stopnia zagrożenia)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Niebezpieczny wyjazd z alei serwisowej</b> i zajechanie drogi innemu kierowcy <span class="reg-chip chip-time">5–10 sek.</span><span class="reg-chip chip-pk">2–5 PK</span> — możliwa dodatkowa kara za spowodowanie kolizji</div><textarea class="reg-entry-edit reg-entry-textarea">Niebezpieczny wyjazd z alei serwisowej i zajechanie drogi innemu kierowcy: 5–10s oraz 2–5 PK (możliwa dodatkowa kara za spowodowanie kolizji)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Przekroczenie dozwolonej prędkości w alei serwisowej</b>, jeśli nie ukarała za to gra <span class="reg-chip chip-time">3–5 sek.</span><span class="reg-chip chip-pk">1–3 PK</span> — zależnie od skali przekroczenia</div><textarea class="reg-entry-edit reg-entry-textarea">Przekroczenie dozwolonej prędkości w alei serwisowej, jeśli nie ukarała za to gra: 3–5s oraz 1–3 PK (zależnie od skali przekroczenia)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Nieoddanie pozycji</b> po uzyskaniu jej w sposób niezgodny z regulaminem <span class="reg-chip chip-time">5 sek.</span><span class="reg-chip chip-pk">1–3 PK</span> — kara może zostać zwiększona przy uzyskaniu większej przewagi</div><textarea class="reg-entry-edit reg-entry-textarea">Nieoddanie pozycji po uzyskaniu jej w sposób niezgodny z regulaminem: 5s oraz 1–3 PK (kara może zostać zwiększona przy uzyskaniu większej przewagi)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Niebezpieczne zachowanie podczas restartu po SC</b>, powodujące zagrożenie dla innych kierowców <span class="reg-chip chip-time">3–10 sek.</span><span class="reg-chip chip-pk">1–4 PK</span> — zależnie od skutków incydentu</div><textarea class="reg-entry-edit reg-entry-textarea">Niebezpieczne zachowanie podczas restartu po SC, powodujące zagrożenie dla innych kierowców: 3–10s oraz 1–4 PK (zależnie od skutków incydentu)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only"><b>Celowe utrudnianie wyścigu</b> innemu kierowcy bez uzasadnienia sportowego <span class="reg-chip chip-time">5–15 sek.</span><span class="reg-chip chip-pk">2–6 PK</span> — w poważnych przypadkach możliwa <span class="reg-chip chip-dsq">DSQ</span></div><textarea class="reg-entry-edit reg-entry-textarea">Celowe utrudnianie wyścigu innemu kierowcy bez uzasadnienia sportowego: 5–15s oraz 2–6 PK (w poważnych przypadkach możliwa DSQ)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only"><b>Celowe unikanie odpowiedzialności za przewinienie</b> (np. opuszczenie sesji w celu uniknięcia kary) <span class="reg-chip chip-pk">3–6 PK</span> — możliwa dodatkowa kara od sędziów</div><textarea class="reg-entry-edit reg-entry-textarea">Celowe unikanie odpowiedzialności za przewinienie, np. opuszczenie sesji w celu uniknięcia kary: 3–6 PK (możliwa dodatkowa kara od sędziów)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Powtarzające się przekraczanie limitów toru</b>, jeśli gra nie naliczyła kary <span class="reg-chip chip-time">3–5 sek.</span><span class="reg-chip chip-pk">1–3 PK</span> — zależnie od skali przewinienia</div><textarea class="reg-entry-edit reg-entry-textarea">**Powtarzające się przekraczanie limitów toru**, jeśli gra nie naliczyła kary: 3–5s oraz 1–3 PK (zależnie od skali przewinienia)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Ścięcie zakrętu</b> i uzyskanie dzięki temu przewagi <span class="reg-chip chip-time">5–10 sek.</span><span class="reg-chip chip-pk">1–3 PK</span> — obowiązek oddania pozycji, jeśli sędziowie tak zdecydują</div><textarea class="reg-entry-edit reg-entry-textarea">**Ścięcie zakrętu** i uzyskanie dzięki temu przewagi: 5–10s oraz 1–3 PK (obowiązek oddania pozycji, jeśli sędziowie tak zdecydują)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only"><b>Wyprzedzanie podczas SC/VSC</b> w sytuacji, gdy jest zabronione <span class="reg-chip chip-time">5–10 sek.</span><span class="reg-chip chip-pk">2–5 PK</span> — w poważnych przypadkach możliwa <span class="reg-chip chip-dsq">DSQ</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Wyprzedzanie podczas SC/VSC** w sytuacji, gdy jest zabronione: 5–10s oraz 2–5 PK (w poważnych przypadkach możliwa DSQ)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Nierespektowanie żółtych flag</b> i brak odpowiedniego zwolnienia <span class="reg-chip chip-time">5–10 sek.</span><span class="reg-chip chip-pk">2–5 PK</span> — zależnie od zagrożenia</div><textarea class="reg-entry-edit reg-entry-textarea">**Nierespektowanie żółtych flag** i brak odpowiedniego zwolnienia: 5–10s oraz 2–5 PK (zależnie od zagrożenia)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Ignorowanie niebieskich flag</b> i utrudnianie bezpiecznego dublowania <span class="reg-chip chip-time">3–5 sek.</span><span class="reg-chip chip-pk">1–3 PK</span> — przy powtarzaniu przewinienia kara może wzrosnąć</div><textarea class="reg-entry-edit reg-entry-textarea">**Ignorowanie niebieskich flag** i utrudnianie bezpiecznego dublowania: 3–5s oraz 1–3 PK (przy powtarzaniu przewinienia kara może wzrosnąć)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Zmiana toru jazdy podczas hamowania</b>, powodująca zagrożenie lub kolizję <span class="reg-chip chip-time">5–10 sek.</span><span class="reg-chip chip-pk">2–5 PK</span> — przy poważnym incydencie możliwa dodatkowa kara</div><textarea class="reg-entry-edit reg-entry-textarea">**Zmiana toru jazdy podczas hamowania**, powodująca zagrożenie lub kolizję: 5–10s oraz 2–5 PK (przy poważnym incydencie możliwa dodatkowa kara)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Wielokrotna zmiana kierunku jazdy</b> w celu obrony pozycji <span class="reg-chip chip-time">3–10 sek.</span><span class="reg-chip chip-pk">1–4 PK</span> — zależnie od stopnia zagrożenia</div><textarea class="reg-entry-edit reg-entry-textarea">**Wielokrotna zmiana kierunku jazdy** w celu obrony pozycji: 3–10s oraz 1–4 PK (zależnie od stopnia zagrożenia)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Niebezpieczny wyjazd z alei serwisowej</b> i zajechanie drogi innemu kierowcy <span class="reg-chip chip-time">5–10 sek.</span><span class="reg-chip chip-pk">2–5 PK</span> — możliwa dodatkowa kara za spowodowanie kolizji</div><textarea class="reg-entry-edit reg-entry-textarea">**Niebezpieczny wyjazd z alei serwisowej** i zajechanie drogi innemu kierowcy: 5–10s oraz 2–5 PK (możliwa dodatkowa kara za spowodowanie kolizji)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Przekroczenie dozwolonej prędkości w alei serwisowej</b>, jeśli nie ukarała za to gra <span class="reg-chip chip-time">3–5 sek.</span><span class="reg-chip chip-pk">1–3 PK</span> — zależnie od skali przekroczenia</div><textarea class="reg-entry-edit reg-entry-textarea">**Przekroczenie dozwolonej prędkości w alei serwisowej**, jeśli nie ukarała za to gra: 3–5s oraz 1–3 PK (zależnie od skali przekroczenia)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Nieoddanie pozycji</b> po uzyskaniu jej w sposób niezgodny z regulaminem <span class="reg-chip chip-time">5 sek.</span><span class="reg-chip chip-pk">1–3 PK</span> — kara może zostać zwiększona przy uzyskaniu większej przewagi</div><textarea class="reg-entry-edit reg-entry-textarea">**Nieoddanie pozycji** po uzyskaniu jej w sposób niezgodny z regulaminem: 5s oraz 1–3 PK (kara może zostać zwiększona przy uzyskaniu większej przewagi)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Niebezpieczne zachowanie podczas restartu po SC</b>, powodujące zagrożenie dla innych kierowców <span class="reg-chip chip-time">3–10 sek.</span><span class="reg-chip chip-pk">1–4 PK</span> — zależnie od skutków incydentu</div><textarea class="reg-entry-edit reg-entry-textarea">**Niebezpieczne zachowanie podczas restartu po SC**, powodujące zagrożenie dla innych kierowców: 3–10s oraz 1–4 PK (zależnie od skutków incydentu)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only"><b>Celowe utrudnianie wyścigu</b> innemu kierowcy bez uzasadnienia sportowego <span class="reg-chip chip-time">5–15 sek.</span><span class="reg-chip chip-pk">2–6 PK</span> — w poważnych przypadkach możliwa <span class="reg-chip chip-dsq">DSQ</span></div><textarea class="reg-entry-edit reg-entry-textarea">**Celowe utrudnianie wyścigu** innemu kierowcy bez uzasadnienia sportowego: 5–15s oraz 2–6 PK (w poważnych przypadkach możliwa DSQ)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry" data-extra="23-35"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only"><b>Celowe unikanie odpowiedzialności za przewinienie</b> (np. opuszczenie sesji w celu uniknięcia kary) <span class="reg-chip chip-pk">3–6 PK</span> — możliwa dodatkowa kara od sędziów</div><textarea class="reg-entry-edit reg-entry-textarea">**Celowe unikanie odpowiedzialności za przewinienie**, np. opuszczenie sesji w celu uniknięcia kary: 3–6 PK (możliwa dodatkowa kara od sędziów)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
                 <button class="add-reg-h3-btn" onclick="addRegH3(this)">+ Dodaj nagłówek sekcji</button>
                 <button class="add-reg-entry-btn" onclick="addRegEntry(this)">+ Dodaj wpis</button>
             </div>
@@ -966,13 +1002,13 @@
             <!-- TAB 1: BŁĘDY GRY -->
             <div class="reg-panel" id="regPanel1">
                 <div class="reg-h3-wrap"><h3 class="reg-h3-display">Zasady ogólne</h3><input class="reg-h3-edit" value="Zasady ogólne"><button class="reg-delete-btn" onclick="this.closest('.reg-h3-wrap').remove()" style="position:static">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Kary przyznane przez grę F1 25 <b>nie podlegają protestowi</b>, chyba że zostały nałożone w wyniku błędu gry lub w sytuacji walki o pozycję, gdy opuszczenie toru było najrozsądniejszą decyzją w celu uniknięcia kolizji. Wymagany materiał wideo jako dowód.</div><textarea class="reg-entry-edit reg-entry-textarea">Kary przyznane przez grę F1 25 nie podlegają protestowi, chyba że zostały nałożone w wyniku błędu gry lub w sytuacji walki o pozycję, gdy opuszczenie toru było najrozsądniejszą decyzją w celu uniknięcia kolizji (wymagany materiał wideo jako dowód).</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Każdy przypadek rozpatrywany jest <b>indywidualnie</b>.</div><textarea class="reg-entry-edit reg-entry-textarea">Każdy przypadek rozpatrywany jest indywidualnie.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Kary przyznane przez grę F1 25 <b>nie podlegają protestowi</b>, chyba że zostały nałożone w wyniku błędu gry lub w sytuacji walki o pozycję, gdy opuszczenie toru było najrozsądniejszą decyzją w celu uniknięcia kolizji. Wymagany materiał wideo jako dowód.</div><textarea class="reg-entry-edit reg-entry-textarea">Kary przyznane przez grę F1 25 **nie podlegają protestowi**, chyba że zostały nałożone w wyniku błędu gry lub w sytuacji walki o pozycję, gdy opuszczenie toru było najrozsądniejszą decyzją w celu uniknięcia kolizji (wymagany materiał wideo jako dowód).</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Każdy przypadek rozpatrywany jest <b>indywidualnie</b>.</div><textarea class="reg-entry-edit reg-entry-textarea">Każdy przypadek rozpatrywany jest **indywidualnie**.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
                 <div class="reg-h3-wrap"><h3 class="reg-h3-display">Procedura wznowienia przy rażącym błędzie gry</h3><input class="reg-h3-edit" value="Procedura wznowienia przy rażącym błędzie gry"><button class="reg-delete-btn" onclick="this.closest('.reg-h3-wrap').remove()" style="position:static">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-yellow);box-shadow:0 0 6px var(--col-yellow)"></span><div class="reg-entry-text display-only"><b>Do 25% długości wyścigu:</b> sesja wznowiona, pola startowe wg kwalifikacji, wyścig 50%</div><textarea class="reg-entry-edit reg-entry-textarea">Do 25% długości wyścigu: sesja zostaje wznowiona, pola startowe według kwalifikacji, wyścig 50%</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-orange);box-shadow:0 0 6px var(--col-orange)"></span><div class="reg-entry-text display-only"><b>25–50% długości wyścigu:</b> sesja wznowiona, pola startowe wg miejsc sprzed błędu, wyścig 35%</div><textarea class="reg-entry-edit reg-entry-textarea">25-50% długości wyścigu: sesja zostaje wznowiona, pola startowe według miejsc sprzed błędu gry, wyścig 35%</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-orange);box-shadow:0 0 6px var(--col-orange)"></span><div class="reg-entry-text display-only"><b>50–75% długości wyścigu:</b> sesja wznowiona, pola startowe wg miejsc sprzed błędu, wyścig 25%</div><textarea class="reg-entry-edit reg-entry-textarea">50-75% długości wyścigu: sesja zostaje wznowiona, pola startowe według miejsc sprzed błędu gry, wyścig 25%</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only"><b>Powyżej 75% długości wyścigu:</b> sesja zakończona, wyniki wg miejsc na ostatnim okrążeniu przed błędem</div><textarea class="reg-entry-edit reg-entry-textarea">Powyżej 75% długości wyścigu: sesja zostaje zakończona, wyniki wyścigu według miejsc na ostatnim okrążeniu przed błędem gry.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-yellow);box-shadow:0 0 6px var(--col-yellow)"></span><div class="reg-entry-text display-only"><b>Do 25% długości wyścigu:</b> sesja wznowiona, pola startowe wg kwalifikacji, wyścig 50%</div><textarea class="reg-entry-edit reg-entry-textarea">**Do 25% długości wyścigu:** sesja zostaje wznowiona, pola startowe według kwalifikacji, wyścig 50%</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-orange);box-shadow:0 0 6px var(--col-orange)"></span><div class="reg-entry-text display-only"><b>25–50% długości wyścigu:</b> sesja wznowiona, pola startowe wg miejsc sprzed błędu, wyścig 35%</div><textarea class="reg-entry-edit reg-entry-textarea">**25–50% długości wyścigu:** sesja zostaje wznowiona, pola startowe według miejsc sprzed błędu gry, wyścig 35%</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-orange);box-shadow:0 0 6px var(--col-orange)"></span><div class="reg-entry-text display-only"><b>50–75% długości wyścigu:</b> sesja wznowiona, pola startowe wg miejsc sprzed błędu, wyścig 25%</div><textarea class="reg-entry-edit reg-entry-textarea">**50–75% długości wyścigu:** sesja zostaje wznowiona, pola startowe według miejsc sprzed błędu gry, wyścig 25%</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only"><b>Powyżej 75% długości wyścigu:</b> sesja zakończona, wyniki wg miejsc na ostatnim okrążeniu przed błędem</div><textarea class="reg-entry-edit reg-entry-textarea">**Powyżej 75% długości wyścigu:** sesja zostaje zakończona, wyniki wyścigu według miejsc na ostatnim okrążeniu przed błędem gry.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
                 <button class="add-reg-h3-btn" onclick="addRegH3(this)">+ Dodaj nagłówek sekcji</button>
                 <button class="add-reg-entry-btn" onclick="addRegEntry(this)">+ Dodaj wpis</button>
             </div>
@@ -980,26 +1016,26 @@
             <!-- TAB 2: NIEOBECNOŚCI -->
             <div class="reg-panel" id="regPanel2">
                 <div class="reg-h3-wrap"><h3 class="reg-h3-display">Kierowca podstawowy</h3><input class="reg-h3-edit" value="Kierowca podstawowy"><button class="reg-delete-btn" onclick="this.closest('.reg-h3-wrap').remove()" style="position:static">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Niestawienie się na wyścig przez kierowcę podstawowego, który potwierdził udział, skutkuje karą <span class="reg-chip chip-pk">3 PK</span>.</div><textarea class="reg-entry-edit reg-entry-textarea">Niestawienie się na wyścig przez kierowcę podstawowego, który potwierdził udział, skutkuje karą 3 PK.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">W przypadku powtórzenia sytuacji możliwa jest <b>degradacja do roli rezerwowego</b> lub <b>usunięcie z ligi</b>.</div><textarea class="reg-entry-edit reg-entry-textarea">W przypadku powtórzenia sytuacji możliwa jest degradacja do roli rezerwowego lub usunięcie z ligi.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Niestawienie się na wyścig przez kierowcę podstawowego, który potwierdził udział, skutkuje karą <span class="reg-chip chip-pk">3 PK</span>.</div><textarea class="reg-entry-edit reg-entry-textarea">Niestawienie się na wyścig przez **kierowcę podstawowego**, który potwierdził udział, skutkuje karą 3 PK.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">W przypadku powtórzenia sytuacji możliwa jest <b>degradacja do roli rezerwowego</b> lub <b>usunięcie z ligi</b>.</div><textarea class="reg-entry-edit reg-entry-textarea">W przypadku powtórzenia sytuacji możliwa jest **degradacja do roli rezerwowego** lub **usunięcie z ligi**.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
                 <div class="reg-h3-wrap"><h3 class="reg-h3-display">Kierowca rezerwowy</h3><input class="reg-h3-edit" value="Kierowca rezerwowy"><button class="reg-delete-btn" onclick="this.closest('.reg-h3-wrap').remove()" style="position:static">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Niestawienie się na wyścig przez kierowcę rezerwowego, który potwierdził udział, skutkuje <b>czasowym odsunięciem od startów</b>.</div><textarea class="reg-entry-edit reg-entry-textarea">Niestawienie się na wyścig przez kierowcę rezerwowego, który potwierdził udział, skutkuje czasowym odsunięciem od startów.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only">Nieobecność na <b>trzech kolejnych wydarzeniach</b> lub <b>czterech łącznie</b> może skutkować degradacją do roli kierowcy rezerwowego lub <b>całkowitym usunięciem z ligi</b>.</div><textarea class="reg-entry-edit reg-entry-textarea">Nieobecność na trzech kolejnych wydarzeniach lub czterech łącznie może skutkować degradacją do roli kierowcy rezerwowego lub całkowitym usunięciem z ligi.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Niestawienie się na wyścig przez kierowcę rezerwowego, który potwierdził udział, skutkuje <b>czasowym odsunięciem od startów</b>.</div><textarea class="reg-entry-edit reg-entry-textarea">Niestawienie się na wyścig przez **kierowcę rezerwowego**, który potwierdził udział, skutkuje **czasowym odsunięciem od startów**.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot" style="background:var(--col-red);box-shadow:0 0 6px var(--col-red)"></span><div class="reg-entry-text display-only">Nieobecność na <b>trzech kolejnych wydarzeniach</b> lub <b>czterech łącznie</b> może skutkować degradacją do roli kierowcy rezerwowego lub <b>całkowitym usunięciem z ligi</b>.</div><textarea class="reg-entry-edit reg-entry-textarea">Nieobecność na **trzech kolejnych wydarzeniach** lub **czterech łącznie** może skutkować degradacją do roli kierowcy rezerwowego lub **całkowitym usunięciem z ligi**.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
                 <button class="add-reg-h3-btn" onclick="addRegH3(this)">+ Dodaj nagłówek sekcji</button>
                 <button class="add-reg-entry-btn" onclick="addRegEntry(this)">+ Dodaj wpis</button>
             </div>
 
             <!-- TAB 3: KWALIFIKACJE -->
             <div class="reg-panel" id="regPanel3">
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Osoba przygotowująca się do okrążenia pomiarowego ma obowiązek zachować <b>odpowiedni odstęp</b> od innych zawodników.</div><textarea class="reg-entry-edit reg-entry-textarea">Osoba przygotowująca się do okrążenia pomiarowego ma obowiązek zachować odpowiedni odstęp od innych zawodników, aby umożliwić sobie prawidłowe wykonanie przejazdu.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Zabrania się <b>skracania trasy</b> w celu szybszego rozpoczęcia okrążenia pomiarowego, wcześniejszego zjazdu do alei serwisowej lub uzyskania dodatkowej prędkości.</div><textarea class="reg-entry-edit reg-entry-textarea">Zabrania się skracania trasy w celu szybszego rozpoczęcia okrążenia pomiarowego, wcześniejszego zjazdu do alei serwisowej lub uzyskania dodatkowej prędkości przed rozpoczęciem okrążenia pomiarowego.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Zakazane jest celowe <b>uszkadzanie tabliczek</b> na dojazdach do zakrętów.</div><textarea class="reg-entry-edit reg-entry-textarea">Zakazane jest celowe uszkadzanie tabliczek na dojazdach do zakrętów.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Kierowca poza okrążeniem pomiarowym ma obowiązek <b>ustąpić pierwszeństwa</b> zawodnikowi będącemu na okrążeniu pomiarowym.</div><textarea class="reg-entry-edit reg-entry-textarea">Kierowca znajdujący się poza okrążeniem pomiarowym ma obowiązek ustąpić pierwszeństwa zawodnikowi będącemu na okrążeniu pomiarowym.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">W przypadku wywieszenia <b>żółtej flagi</b> wszyscy uczestnicy muszą zachować szczególną ostrożność.</div><textarea class="reg-entry-edit reg-entry-textarea">W przypadku wywieszenia żółtej flagi wszyscy uczestnicy muszą zachować szczególną ostrożność.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Kierowca powracający na tor zobowiązany jest upewnić się, że jego manewr <b>nie utrudni jazdy</b> innym zawodnikom.</div><textarea class="reg-entry-edit reg-entry-textarea">Kierowca powracający na tor zobowiązany jest upewnić się, że jego manewr nie utrudni jazdy innym zawodnikom.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Wycofanie się z kwalifikacji możliwe jest wyłącznie poprzez opcję <b>„Opuść sesję"</b> w menu gry i tylko z alei serwisowej.</div><textarea class="reg-entry-edit reg-entry-textarea">Wycofanie się z kwalifikacji możliwe jest wyłącznie poprzez opcję „Opuść sesję" w menu gry i tylko z alei serwisowej.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Jeżeli na torze pozostaje ostatni uczestnik, a pozostali nie mogą już rozpocząć okrążenia pomiarowego, dopuszcza się <b>wycofanie w bezpiecznym miejscu</b> poza aleją serwisową.</div><textarea class="reg-entry-edit reg-entry-textarea">Jeżeli na torze pozostaje ostatni uczestnik, a pozostali nie mogą już rozpocząć okrążenia pomiarowego, dopuszcza się wycofanie w bezpiecznym miejscu poza aleją serwisową.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Zabrania się <b>jazdy na bocie</b> podczas kwalifikacji, chyba że sytuacja na torze wymaga innych działań. Ograniczenie dotyczy szczególnie okrążenia pomiarowego.</div><textarea class="reg-entry-edit reg-entry-textarea">Zabrania się jazdy na bocie podczas kwalifikacji, chyba że sytuacja na torze wymaga innych działań. Ograniczenie to w szczególności dotyczy okrążenia pomiarowego.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Osoba przygotowująca się do okrążenia pomiarowego ma obowiązek zachować <b>odpowiedni odstęp</b> od innych zawodników.</div><textarea class="reg-entry-edit reg-entry-textarea">Osoba przygotowująca się do okrążenia pomiarowego ma obowiązek zachować **odpowiedni odstęp** od innych zawodników, aby umożliwić sobie prawidłowe wykonanie przejazdu.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Zabrania się <b>skracania trasy</b> w celu szybszego rozpoczęcia okrążenia pomiarowego, wcześniejszego zjazdu do alei serwisowej lub uzyskania dodatkowej prędkości.</div><textarea class="reg-entry-edit reg-entry-textarea">Zabrania się **skracania trasy** w celu szybszego rozpoczęcia okrążenia pomiarowego, wcześniejszego zjazdu do alei serwisowej lub uzyskania dodatkowej prędkości przed rozpoczęciem okrążenia pomiarowego.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Zakazane jest celowe <b>uszkadzanie tabliczek</b> na dojazdach do zakrętów.</div><textarea class="reg-entry-edit reg-entry-textarea">Zakazane jest celowe **uszkadzanie tabliczek** na dojazdach do zakrętów.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Kierowca poza okrążeniem pomiarowym ma obowiązek <b>ustąpić pierwszeństwa</b> zawodnikowi będącemu na okrążeniu pomiarowym.</div><textarea class="reg-entry-edit reg-entry-textarea">Kierowca znajdujący się poza okrążeniem pomiarowym ma obowiązek **ustąpić pierwszeństwa** zawodnikowi będącemu na okrążeniu pomiarowym.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">W przypadku wywieszenia <b>żółtej flagi</b> wszyscy uczestnicy muszą zachować szczególną ostrożność.</div><textarea class="reg-entry-edit reg-entry-textarea">W przypadku wywieszenia **żółtej flagi** wszyscy uczestnicy muszą zachować szczególną ostrożność.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Kierowca powracający na tor zobowiązany jest upewnić się, że jego manewr <b>nie utrudni jazdy</b> innym zawodnikom.</div><textarea class="reg-entry-edit reg-entry-textarea">Kierowca powracający na tor zobowiązany jest upewnić się, że jego manewr **nie utrudni jazdy** innym zawodnikom.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Wycofanie się z kwalifikacji możliwe jest wyłącznie poprzez opcję <b>„Opuść sesję"</b> w menu gry i tylko z alei serwisowej.</div><textarea class="reg-entry-edit reg-entry-textarea">Wycofanie się z kwalifikacji możliwe jest wyłącznie poprzez opcję **„Opuść sesję"** w menu gry i tylko z alei serwisowej.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Jeżeli na torze pozostaje ostatni uczestnik, a pozostali nie mogą już rozpocząć okrążenia pomiarowego, dopuszcza się <b>wycofanie w bezpiecznym miejscu</b> poza aleją serwisową.</div><textarea class="reg-entry-edit reg-entry-textarea">Jeżeli na torze pozostaje ostatni uczestnik, a pozostali nie mogą już rozpocząć okrążenia pomiarowego, dopuszcza się **wycofanie w bezpiecznym miejscu** poza aleją serwisową.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Zabrania się <b>jazdy na bocie</b> podczas kwalifikacji, chyba że sytuacja na torze wymaga innych działań. Ograniczenie dotyczy szczególnie okrążenia pomiarowego.</div><textarea class="reg-entry-edit reg-entry-textarea">Zabrania się **jazdy na bocie** podczas kwalifikacji, chyba że sytuacja na torze wymaga innych działań. Ograniczenie to w szczególności dotyczy okrążenia pomiarowego.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
                 <button class="add-reg-h3-btn" onclick="addRegH3(this)">+ Dodaj nagłówek sekcji</button>
                 <button class="add-reg-entry-btn" onclick="addRegEntry(this)">+ Dodaj wpis</button>
             </div>
@@ -1007,31 +1043,39 @@
             <!-- TAB 4: WYŚCIG -->
             <div class="reg-panel" id="regPanel4">
                 <div class="reg-h3-wrap"><h3 class="reg-h3-display">Zasady startu i jazdy</h3><input class="reg-h3-edit" value="Zasady startu i jazdy"><button class="reg-delete-btn" onclick="this.closest('.reg-h3-wrap').remove()" style="position:static">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Kategoryczny zakaz wyprzedzania</b> podczas okrążenia formującego.</div><textarea class="reg-entry-edit reg-entry-textarea">Kategoryczny zakaz wyprzedzania podczas okrążenia formującego.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Zawodnicy muszą dostosować <b>rodzaj opon</b> do aktualnych warunków torowych, z wyjątkiem sytuacji zmiennej pogody.</div><textarea class="reg-entry-edit reg-entry-textarea">Zawodnicy muszą dostosować rodzaj opon do aktualnych warunków torowych, z wyjątkiem sytuacji zmiennej pogody.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Pojazd uszkodzony w sposób uniemożliwiający bezpieczną jazdę musi niezwłocznie <b>zjechać do alei serwisowej</b>.</div><textarea class="reg-entry-edit reg-entry-textarea">Pojazd uszkodzony w sposób uniemożliwiający bezpieczną jazdę musi niezwłocznie zjechać do alei serwisowej w celu naprawy.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Kierowcy ponoszą <b>pełną odpowiedzialność</b> za swoje manewry. Zarówno atakujący, jak i broniący się odpowiadają za bezpieczny przebieg wyprzedzania.</div><textarea class="reg-entry-edit reg-entry-textarea">Kierowcy ponoszą pełną odpowiedzialność za swoje manewry. Podczas wyprzedzania zarówno kierowca atakujący, jak i broniący się odpowiadają za bezpieczny przebieg manewru.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only"><b>Kategoryczny zakaz wyprzedzania</b> podczas okrążenia formującego.</div><textarea class="reg-entry-edit reg-entry-textarea">**Kategoryczny zakaz wyprzedzania** podczas okrążenia formującego.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Zawodnicy muszą dostosować <b>rodzaj opon</b> do aktualnych warunków torowych, z wyjątkiem sytuacji zmiennej pogody.</div><textarea class="reg-entry-edit reg-entry-textarea">Zawodnicy muszą dostosować **rodzaj opon** do aktualnych warunków torowych, z wyjątkiem sytuacji zmiennej pogody.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Pojazd uszkodzony w sposób uniemożliwiający bezpieczną jazdę musi niezwłocznie <b>zjechać do alei serwisowej</b>.</div><textarea class="reg-entry-edit reg-entry-textarea">Pojazd uszkodzony w sposób uniemożliwiający bezpieczną jazdę musi niezwłocznie **zjechać do alei serwisowej** w celu naprawy.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Kierowcy ponoszą <b>pełną odpowiedzialność</b> za swoje manewry. Zarówno atakujący, jak i broniący się odpowiadają za bezpieczny przebieg wyprzedzania.</div><textarea class="reg-entry-edit reg-entry-textarea">Kierowcy ponoszą **pełną odpowiedzialność** za swoje manewry. Podczas wyprzedzania zarówno kierowca atakujący, jak i broniący się odpowiadają za bezpieczny przebieg manewru.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
                 <div class="reg-h3-wrap"><h3 class="reg-h3-display">Zakazy podczas wyprzedzania</h3><input class="reg-h3-edit" value="Zakazy podczas wyprzedzania"><button class="reg-delete-btn" onclick="this.closest('.reg-h3-wrap').remove()" style="position:static">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Zmiana lub korekta linii jazdy w <b>strefie dohamowania</b> przed zakrętem</div><textarea class="reg-entry-edit reg-entry-textarea">Zmiana lub korekta linii jazdy w strefie dohamowania przed zakrętem</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Wypychanie przeciwników <b>poza tor</b></div><textarea class="reg-entry-edit reg-entry-textarea">Wypychanie przeciwników poza tor</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Wyprzedzanie <b>poza torem</b></div><textarea class="reg-entry-edit reg-entry-textarea">Wyprzedzanie poza torem</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Gwałtowne, nieuzasadnione <b>hamowanie</b></div><textarea class="reg-entry-edit reg-entry-textarea">Gwałtowne, nieuzasadnione hamowanie</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Wielokrotna zmiana linii jazdy (tzw. <b>waving</b>)</div><textarea class="reg-entry-edit reg-entry-textarea">Wielokrotna zmiana linii jazdy (tzw. waving)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Niereagowanie na obowiązek <b>pozostawienia miejsca</b> rywalowi</div><textarea class="reg-entry-edit reg-entry-textarea">Niereagowanie na obowiązek pozostawienia miejsca rywalowi</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Manewr wyprzedzania z mniej niż <b>dwoma kołami</b> w granicach toru</div><textarea class="reg-entry-edit reg-entry-textarea">Wykonywania manewru wyprzedzania z mniej niż dwoma kołami w granicach toru</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Zmiana lub korekta linii jazdy w <b>strefie dohamowania</b> przed zakrętem</div><textarea class="reg-entry-edit reg-entry-textarea">Zmiana lub korekta linii jazdy w **strefie dohamowania** przed zakrętem</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Wypychanie przeciwników <b>poza tor</b></div><textarea class="reg-entry-edit reg-entry-textarea">Wypychanie przeciwników **poza tor**</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Wyprzedzanie <b>poza torem</b></div><textarea class="reg-entry-edit reg-entry-textarea">Wyprzedzanie **poza torem**</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Gwałtowne, nieuzasadnione <b>hamowanie</b></div><textarea class="reg-entry-edit reg-entry-textarea">Gwałtowne, nieuzasadnione **hamowanie**</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Wielokrotna zmiana linii jazdy (tzw. <b>waving</b>)</div><textarea class="reg-entry-edit reg-entry-textarea">Wielokrotna zmiana linii jazdy (tzw. **waving**)</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Niereagowanie na obowiązek <b>pozostawienia miejsca</b> rywalowi</div><textarea class="reg-entry-edit reg-entry-textarea">Niereagowanie na obowiązek **pozostawienia miejsca** rywalowi</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Manewr wyprzedzania z mniej niż <b>dwoma kołami</b> w granicach toru</div><textarea class="reg-entry-edit reg-entry-textarea">Wykonywanie manewru wyprzedzania z mniej niż **dwoma kołami** w granicach toru</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
                 <div class="reg-h3-wrap"><h3 class="reg-h3-display">Opuszczenie toru</h3><input class="reg-h3-edit" value="Opuszczenie toru"><button class="reg-delete-btn" onclick="this.closest('.reg-h3-wrap').remove()" style="position:static">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Kierowca który opuści tor, musi jak najszybciej i bezpiecznie na niego powrócić, <b>nie utrudniając jazdy</b> innym zawodnikom.</div><textarea class="reg-entry-edit reg-entry-textarea">Kierowca, który opuści tor, musi jak najszybciej i bezpiecznie na niego powrócić, nie utrudniając jazdy innym zawodnikom.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Zawodnik, który zyskał pozycję wskutek opuszczenia toru, ma obowiązek <b>oddać ją</b> przy najbliższej bezpiecznej okazji.</div><textarea class="reg-entry-edit reg-entry-textarea">Zawodnik, który zyskał pozycję wskutek opuszczenia toru, ma obowiązek oddać ją przy najbliższej bezpiecznej okazji.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Kierowca który opuści tor, musi jak najszybciej i bezpiecznie na niego powrócić, <b>nie utrudniając jazdy</b> innym zawodnikom.</div><textarea class="reg-entry-edit reg-entry-textarea">Kierowca, który opuści tor, musi jak najszybciej i bezpiecznie na niego powrócić, **nie utrudniając jazdy** innym zawodnikom.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Zawodnik, który zyskał pozycję wskutek opuszczenia toru, ma obowiązek <b>oddać ją</b> przy najbliższej bezpiecznej okazji.</div><textarea class="reg-entry-edit reg-entry-textarea">Zawodnik, który zyskał pozycję wskutek opuszczenia toru, ma obowiązek **oddać ją** przy najbliższej bezpiecznej okazji.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
                 <div class="reg-h3-wrap"><h3 class="reg-h3-display">Zakazy podczas wyścigu</h3><input class="reg-h3-edit" value="Zakazy podczas wyścigu"><button class="reg-delete-btn" onclick="this.closest('.reg-h3-wrap').remove()" style="position:static">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Celowe rozbijanie pojazdu, ścinanie tabliczek, jazda w przeciwnym kierunku, korzystanie z „Powrót na tor", używanie „Opuść sesję" / „Wyjdź z gry" podczas przebywania na torze, jazda na bocie podczas startu, zatrzymywanie pojazdu na torze bez przyczyny, <b>samosąd</b> podczas zawodów.</div><textarea class="reg-entry-edit reg-entry-textarea">Zabrania się: celowego rozbijania pojazdu, ścinania tabliczek przed zakrętami, jazdy w przeciwnym kierunku, korzystania z opcji „Powrót na tor", używania „Opuść sesję" lub „Wyjdź z gry" podczas przebywania na torze, jazdy na bocie podczas startu i wyścigu, zatrzymywania pojazdu na torze bez uzasadnionej przyczyny, samosądu podczas zawodów.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Celowe rozbijanie pojazdu, ścinanie tabliczek, jazda w przeciwnym kierunku, korzystanie z „Powrót na tor", używanie „Opuść sesję" / „Wyjdź z gry" podczas przebywania na torze, jazda na bocie podczas startu, zatrzymywanie pojazdu na torze bez przyczyny, <b>samosąd</b> podczas zawodów.</div><textarea class="reg-entry-edit reg-entry-textarea">**Zabrania się:**
+– celowego rozbijania pojazdu,
+– ścinania tabliczek przed zakrętami,
+– jazdy w przeciwnym kierunku,
+– korzystania z opcji „Powrót na tor",
+– używania „Opuść sesję" lub „Wyjdź z gry" podczas przebywania na torze,
+– jazdy na bocie podczas startu i wyścigu,
+– zatrzymywania pojazdu na torze bez uzasadnionej przyczyny,
+– **samosądu** podczas zawodów.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
                 <button class="add-reg-h3-btn" onclick="addRegH3(this)">+ Dodaj nagłówek sekcji</button>
                 <button class="add-reg-entry-btn" onclick="addRegEntry(this)">+ Dodaj wpis</button>
             </div>
 
             <!-- TAB 5: POSTANOWIENIA KOŃCOWE -->
             <div class="reg-panel" id="regPanel5">
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Zarząd Ligi zastrzega sobie prawo do <b>wprowadzania zmian w regulaminie</b> w trakcie sezonu. O wszelkich zmianach uczestnicy zostaną poinformowani na <b>Discordzie Ligi</b>.</div><textarea class="reg-entry-edit reg-entry-textarea">Zarząd Ligi zastrzega sobie prawo do wprowadzania zmian w regulaminie w trakcie sezonu. O wszelkich zmianach uczestnicy zostaną poinformowani na Discordzie Ligi.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
-                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">W sytuacjach nieuregulowanych niniejszym regulaminem <b>Zarząd podejmuje decyzję według własnego uznania</b>, adekwatnie do okoliczności.</div><textarea class="reg-entry-edit reg-entry-textarea">W sytuacjach nieuregulowanych niniejszym regulaminem Zarząd podejmuje decyzję według własnego uznania, adekwatnie do okoliczności.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">Zarząd Ligi zastrzega sobie prawo do <b>wprowadzania zmian w regulaminie</b> w trakcie sezonu. O wszelkich zmianach uczestnicy zostaną poinformowani na <b>Discordzie Ligi</b>.</div><textarea class="reg-entry-edit reg-entry-textarea">Zarząd Ligi zastrzega sobie prawo do **wprowadzania zmian w regulaminie** w trakcie sezonu. O wszelkich zmianach uczestnicy zostaną poinformowani na **Discordzie Ligi**.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
+                <div class="reg-entry"><span class="reg-entry-dot"></span><div class="reg-entry-text display-only">W sytuacjach nieuregulowanych niniejszym regulaminem <b>Zarząd podejmuje decyzję według własnego uznania</b>, adekwatnie do okoliczności.</div><textarea class="reg-entry-edit reg-entry-textarea">W sytuacjach nieuregulowanych niniejszym regulaminem **Zarząd podejmuje decyzję według własnego uznania**, adekwatnie do okoliczności.</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button></div>
                 <button class="add-reg-h3-btn" onclick="addRegH3(this)">+ Dodaj nagłówek sekcji</button>
                 <button class="add-reg-entry-btn" onclick="addRegEntry(this)">+ Dodaj wpis</button>
             </div>
@@ -1156,6 +1200,79 @@
     // do zakładki „Taryfikator". Po pierwszym zapisie w panelu admina trafiają
     // do Firebase i flaga extra2335 wyłącza to dokładanie.
     const EXTRA_2335_HTML = Array.from(document.querySelectorAll('.reg-entry[data-extra="23-35"]')).map(el => el.outerHTML);
+
+    // ── POGRUBIENIA W ZAPISANYM REGULAMINIE ──
+    // Regulamin zapisany w Firebase przed wprowadzeniem pogrubień ma zwykły tekst.
+    // Przy wczytaniu podmieniamy znane wpisy na wersje z **pogrubieniami**; po pierwszym
+    // zapisie w panelu admina trafiają do Firebase, a flaga boldV1 wyłącza tę podmianę.
+    const REG_BOLD_MAP = {
+        "Brake check (nagłe, nieuzasadnione hamowanie): kara 5–20s oraz 3–5 PK": "**Brake check** (nagłe, nieuzasadnione hamowanie): kara 5–20s oraz 3–5 PK",
+        "Zwiększanie czasu delta podczas VSC/SC: 3–5s oraz 1–5 PK": "**Zwiększanie czasu delta podczas VSC/SC**: 3–5s oraz 1–5 PK",
+        "Blokowanie w kwalifikacjach: 1–3 PK": "**Blokowanie w kwalifikacjach**: 1–3 PK",
+        "Spowodowanie kolizji: 3–10s oraz 1–5 PK": "**Spowodowanie kolizji**: 3–10s oraz 1–5 PK",
+        "Wypychanie poza tor: 3s oraz 1–3 PK": "**Wypychanie poza tor**: 3s oraz 1–3 PK",
+        "Użycie funkcji „Powrót na tor\": DSQ. Wyjątki: niemożność kontynuowania jazdy, okrążenie formujące, kwalifikacje.": "**Użycie funkcji „Powrót na tor\"**: DSQ. Wyjątki: niemożność kontynuowania jazdy, okrążenie formujące, kwalifikacje.",
+        "Agresywny divebomb (atak z dużej odległości): 3–10s oraz 1–6 PK": "**Agresywny divebomb** (atak z dużej odległości): 3–10s oraz 1–6 PK",
+        "Nierespektowanie overlapu przez kierowcę będącego z przodu: 1–3 PK": "**Nierespektowanie overlapu** przez kierowcę będącego z przodu: 1–3 PK",
+        "Niebezpiecznie wolna jazda podczas restartu po SC: 1–3 PK": "**Niebezpiecznie wolna jazda podczas restartu po SC**: 1–3 PK",
+        "Wycofanie się z sesji na torze: 6 PK": "**Wycofanie się z sesji na torze**: 6 PK",
+        "Celowe rozbicie bolidu (dotyczy również linii mety na ostatnim okrążeniu): 3–8 PK": "**Celowe rozbicie bolidu** (dotyczy również linii mety na ostatnim okrążeniu): 3–8 PK",
+        "Próba celowego wywołania SC: kara według uznania FIA": "**Próba celowego wywołania SC**: kara według uznania FIA",
+        "Jazda na SI: 1–3 PK lub DSQ (w zależności od długości i szkodliwości naruszenia)": "**Jazda na SI**: 1–3 PK lub DSQ (w zależności od długości i szkodliwości naruszenia)",
+        "Przecięcie linii wjazdu lub zjazdu do alei serwisowej jakimkolwiek kołem: 3–5s oraz 1–2 PK (w zależności od szkodliwości; nie dotyczy sytuacji objętych wcześniejszą dyrektywą wyścigową)": "**Przecięcie linii wjazdu lub zjazdu do alei serwisowej** jakimkolwiek kołem: 3–5s oraz 1–2 PK (w zależności od szkodliwości; nie dotyczy sytuacji objętych wcześniejszą dyrektywą wyścigową)",
+        "Niebezpieczny powrót na tor: 3–10s oraz 1–5 PK": "**Niebezpieczny powrót na tor**: 3–10s oraz 1–5 PK",
+        "Niebezpieczna zmiana linii jazdy: 3–5s oraz 1–5 PK": "**Niebezpieczna zmiana linii jazdy**: 3–5s oraz 1–5 PK",
+        "Wyprzedzanie podczas okrążenia formującego: kara według uznania FIA": "**Wyprzedzanie podczas okrążenia formującego**: kara według uznania FIA",
+        "Rozpoczęcie sesji (one-shot kwalifikacje / wyścig) bez zgody hosta: 8 PK": "**Rozpoczęcie sesji** (one-shot kwalifikacje / wyścig) **bez zgody hosta**: 8 PK",
+        "Powtarzające się przekraczanie limitów toru, jeśli gra nie naliczyła kary: 3–5s oraz 1–3 PK (zależnie od skali przewinienia)": "**Powtarzające się przekraczanie limitów toru**, jeśli gra nie naliczyła kary: 3–5s oraz 1–3 PK (zależnie od skali przewinienia)",
+        "Ścięcie zakrętu i uzyskanie dzięki temu przewagi: 5–10s oraz 1–3 PK (obowiązek oddania pozycji, jeśli sędziowie tak zdecydują)": "**Ścięcie zakrętu** i uzyskanie dzięki temu przewagi: 5–10s oraz 1–3 PK (obowiązek oddania pozycji, jeśli sędziowie tak zdecydują)",
+        "Wyprzedzanie podczas SC/VSC w sytuacji, gdy jest zabronione: 5–10s oraz 2–5 PK (w poważnych przypadkach możliwa DSQ)": "**Wyprzedzanie podczas SC/VSC** w sytuacji, gdy jest zabronione: 5–10s oraz 2–5 PK (w poważnych przypadkach możliwa DSQ)",
+        "Nierespektowanie żółtych flag i brak odpowiedniego zwolnienia: 5–10s oraz 2–5 PK (zależnie od zagrożenia)": "**Nierespektowanie żółtych flag** i brak odpowiedniego zwolnienia: 5–10s oraz 2–5 PK (zależnie od zagrożenia)",
+        "Ignorowanie niebieskich flag i utrudnianie bezpiecznego dublowania: 3–5s oraz 1–3 PK (przy powtarzaniu przewinienia kara może wzrosnąć)": "**Ignorowanie niebieskich flag** i utrudnianie bezpiecznego dublowania: 3–5s oraz 1–3 PK (przy powtarzaniu przewinienia kara może wzrosnąć)",
+        "Zmiana toru jazdy podczas hamowania, powodująca zagrożenie lub kolizję: 5–10s oraz 2–5 PK (przy poważnym incydencie możliwa dodatkowa kara)": "**Zmiana toru jazdy podczas hamowania**, powodująca zagrożenie lub kolizję: 5–10s oraz 2–5 PK (przy poważnym incydencie możliwa dodatkowa kara)",
+        "Wielokrotna zmiana kierunku jazdy w celu obrony pozycji: 3–10s oraz 1–4 PK (zależnie od stopnia zagrożenia)": "**Wielokrotna zmiana kierunku jazdy** w celu obrony pozycji: 3–10s oraz 1–4 PK (zależnie od stopnia zagrożenia)",
+        "Niebezpieczny wyjazd z alei serwisowej i zajechanie drogi innemu kierowcy: 5–10s oraz 2–5 PK (możliwa dodatkowa kara za spowodowanie kolizji)": "**Niebezpieczny wyjazd z alei serwisowej** i zajechanie drogi innemu kierowcy: 5–10s oraz 2–5 PK (możliwa dodatkowa kara za spowodowanie kolizji)",
+        "Przekroczenie dozwolonej prędkości w alei serwisowej, jeśli nie ukarała za to gra: 3–5s oraz 1–3 PK (zależnie od skali przekroczenia)": "**Przekroczenie dozwolonej prędkości w alei serwisowej**, jeśli nie ukarała za to gra: 3–5s oraz 1–3 PK (zależnie od skali przekroczenia)",
+        "Nieoddanie pozycji po uzyskaniu jej w sposób niezgodny z regulaminem: 5s oraz 1–3 PK (kara może zostać zwiększona przy uzyskaniu większej przewagi)": "**Nieoddanie pozycji** po uzyskaniu jej w sposób niezgodny z regulaminem: 5s oraz 1–3 PK (kara może zostać zwiększona przy uzyskaniu większej przewagi)",
+        "Niebezpieczne zachowanie podczas restartu po SC, powodujące zagrożenie dla innych kierowców: 3–10s oraz 1–4 PK (zależnie od skutków incydentu)": "**Niebezpieczne zachowanie podczas restartu po SC**, powodujące zagrożenie dla innych kierowców: 3–10s oraz 1–4 PK (zależnie od skutków incydentu)",
+        "Celowe utrudnianie wyścigu innemu kierowcy bez uzasadnienia sportowego: 5–15s oraz 2–6 PK (w poważnych przypadkach możliwa DSQ)": "**Celowe utrudnianie wyścigu** innemu kierowcy bez uzasadnienia sportowego: 5–15s oraz 2–6 PK (w poważnych przypadkach możliwa DSQ)",
+        "Celowe unikanie odpowiedzialności za przewinienie, np. opuszczenie sesji w celu uniknięcia kary: 3–6 PK (możliwa dodatkowa kara od sędziów)": "**Celowe unikanie odpowiedzialności za przewinienie**, np. opuszczenie sesji w celu uniknięcia kary: 3–6 PK (możliwa dodatkowa kara od sędziów)",
+        "Kary przyznane przez grę F1 25 nie podlegają protestowi, chyba że zostały nałożone w wyniku błędu gry lub w sytuacji walki o pozycję, gdy opuszczenie toru było najrozsądniejszą decyzją w celu uniknięcia kolizji (wymagany materiał wideo jako dowód).": "Kary przyznane przez grę F1 25 **nie podlegają protestowi**, chyba że zostały nałożone w wyniku błędu gry lub w sytuacji walki o pozycję, gdy opuszczenie toru było najrozsądniejszą decyzją w celu uniknięcia kolizji (wymagany materiał wideo jako dowód).",
+        "Każdy przypadek rozpatrywany jest indywidualnie.": "Każdy przypadek rozpatrywany jest **indywidualnie**.",
+        "Do 25% długości wyścigu: sesja zostaje wznowiona, pola startowe według kwalifikacji, wyścig 50%": "**Do 25% długości wyścigu:** sesja zostaje wznowiona, pola startowe według kwalifikacji, wyścig 50%",
+        "25-50% długości wyścigu: sesja zostaje wznowiona, pola startowe według miejsc sprzed błędu gry, wyścig 35%": "**25–50% długości wyścigu:** sesja zostaje wznowiona, pola startowe według miejsc sprzed błędu gry, wyścig 35%",
+        "50-75% długości wyścigu: sesja zostaje wznowiona, pola startowe według miejsc sprzed błędu gry, wyścig 25%": "**50–75% długości wyścigu:** sesja zostaje wznowiona, pola startowe według miejsc sprzed błędu gry, wyścig 25%",
+        "Powyżej 75% długości wyścigu: sesja zostaje zakończona, wyniki wyścigu według miejsc na ostatnim okrążeniu przed błędem gry.": "**Powyżej 75% długości wyścigu:** sesja zostaje zakończona, wyniki wyścigu według miejsc na ostatnim okrążeniu przed błędem gry.",
+        "Niestawienie się na wyścig przez kierowcę podstawowego, który potwierdził udział, skutkuje karą 3 PK.": "Niestawienie się na wyścig przez **kierowcę podstawowego**, który potwierdził udział, skutkuje karą 3 PK.",
+        "W przypadku powtórzenia sytuacji możliwa jest degradacja do roli rezerwowego lub usunięcie z ligi.": "W przypadku powtórzenia sytuacji możliwa jest **degradacja do roli rezerwowego** lub **usunięcie z ligi**.",
+        "Niestawienie się na wyścig przez kierowcę rezerwowego, który potwierdził udział, skutkuje czasowym odsunięciem od startów.": "Niestawienie się na wyścig przez **kierowcę rezerwowego**, który potwierdził udział, skutkuje **czasowym odsunięciem od startów**.",
+        "Nieobecność na trzech kolejnych wydarzeniach lub czterech łącznie może skutkować degradacją do roli kierowcy rezerwowego lub całkowitym usunięciem z ligi.": "Nieobecność na **trzech kolejnych wydarzeniach** lub **czterech łącznie** może skutkować degradacją do roli kierowcy rezerwowego lub **całkowitym usunięciem z ligi**.",
+        "Osoba przygotowująca się do okrążenia pomiarowego ma obowiązek zachować odpowiedni odstęp od innych zawodników, aby umożliwić sobie prawidłowe wykonanie przejazdu.": "Osoba przygotowująca się do okrążenia pomiarowego ma obowiązek zachować **odpowiedni odstęp** od innych zawodników, aby umożliwić sobie prawidłowe wykonanie przejazdu.",
+        "Zabrania się skracania trasy w celu szybszego rozpoczęcia okrążenia pomiarowego, wcześniejszego zjazdu do alei serwisowej lub uzyskania dodatkowej prędkości przed rozpoczęciem okrążenia pomiarowego.": "Zabrania się **skracania trasy** w celu szybszego rozpoczęcia okrążenia pomiarowego, wcześniejszego zjazdu do alei serwisowej lub uzyskania dodatkowej prędkości przed rozpoczęciem okrążenia pomiarowego.",
+        "Zakazane jest celowe uszkadzanie tabliczek na dojazdach do zakrętów.": "Zakazane jest celowe **uszkadzanie tabliczek** na dojazdach do zakrętów.",
+        "Kierowca znajdujący się poza okrążeniem pomiarowym ma obowiązek ustąpić pierwszeństwa zawodnikowi będącemu na okrążeniu pomiarowym.": "Kierowca znajdujący się poza okrążeniem pomiarowym ma obowiązek **ustąpić pierwszeństwa** zawodnikowi będącemu na okrążeniu pomiarowym.",
+        "W przypadku wywieszenia żółtej flagi wszyscy uczestnicy muszą zachować szczególną ostrożność.": "W przypadku wywieszenia **żółtej flagi** wszyscy uczestnicy muszą zachować szczególną ostrożność.",
+        "Kierowca powracający na tor zobowiązany jest upewnić się, że jego manewr nie utrudni jazdy innym zawodnikom.": "Kierowca powracający na tor zobowiązany jest upewnić się, że jego manewr **nie utrudni jazdy** innym zawodnikom.",
+        "Wycofanie się z kwalifikacji możliwe jest wyłącznie poprzez opcję „Opuść sesję\" w menu gry i tylko z alei serwisowej.": "Wycofanie się z kwalifikacji możliwe jest wyłącznie poprzez opcję **„Opuść sesję\"** w menu gry i tylko z alei serwisowej.",
+        "Jeżeli na torze pozostaje ostatni uczestnik, a pozostali nie mogą już rozpocząć okrążenia pomiarowego, dopuszcza się wycofanie w bezpiecznym miejscu poza aleją serwisową.": "Jeżeli na torze pozostaje ostatni uczestnik, a pozostali nie mogą już rozpocząć okrążenia pomiarowego, dopuszcza się **wycofanie w bezpiecznym miejscu** poza aleją serwisową.",
+        "Zabrania się jazdy na bocie podczas kwalifikacji, chyba że sytuacja na torze wymaga innych działań. Ograniczenie to w szczególności dotyczy okrążenia pomiarowego.": "Zabrania się **jazdy na bocie** podczas kwalifikacji, chyba że sytuacja na torze wymaga innych działań. Ograniczenie to w szczególności dotyczy okrążenia pomiarowego.",
+        "Kategoryczny zakaz wyprzedzania podczas okrążenia formującego.": "**Kategoryczny zakaz wyprzedzania** podczas okrążenia formującego.",
+        "Zawodnicy muszą dostosować rodzaj opon do aktualnych warunków torowych, z wyjątkiem sytuacji zmiennej pogody.": "Zawodnicy muszą dostosować **rodzaj opon** do aktualnych warunków torowych, z wyjątkiem sytuacji zmiennej pogody.",
+        "Pojazd uszkodzony w sposób uniemożliwiający bezpieczną jazdę musi niezwłocznie zjechać do alei serwisowej w celu naprawy.": "Pojazd uszkodzony w sposób uniemożliwiający bezpieczną jazdę musi niezwłocznie **zjechać do alei serwisowej** w celu naprawy.",
+        "Kierowcy ponoszą pełną odpowiedzialność za swoje manewry. Podczas wyprzedzania zarówno kierowca atakujący, jak i broniący się odpowiadają za bezpieczny przebieg manewru.": "Kierowcy ponoszą **pełną odpowiedzialność** za swoje manewry. Podczas wyprzedzania zarówno kierowca atakujący, jak i broniący się odpowiadają za bezpieczny przebieg manewru.",
+        "Zmiana lub korekta linii jazdy w strefie dohamowania przed zakrętem": "Zmiana lub korekta linii jazdy w **strefie dohamowania** przed zakrętem",
+        "Wypychanie przeciwników poza tor": "Wypychanie przeciwników **poza tor**",
+        "Wyprzedzanie poza torem": "Wyprzedzanie **poza torem**",
+        "Gwałtowne, nieuzasadnione hamowanie": "Gwałtowne, nieuzasadnione **hamowanie**",
+        "Wielokrotna zmiana linii jazdy (tzw. waving)": "Wielokrotna zmiana linii jazdy (tzw. **waving**)",
+        "Niereagowanie na obowiązek pozostawienia miejsca rywalowi": "Niereagowanie na obowiązek **pozostawienia miejsca** rywalowi",
+        "Wykonywania manewru wyprzedzania z mniej niż dwoma kołami w granicach toru": "Wykonywanie manewru wyprzedzania z mniej niż **dwoma kołami** w granicach toru",
+        "Kierowca, który opuści tor, musi jak najszybciej i bezpiecznie na niego powrócić, nie utrudniając jazdy innym zawodnikom.": "Kierowca, który opuści tor, musi jak najszybciej i bezpiecznie na niego powrócić, **nie utrudniając jazdy** innym zawodnikom.",
+        "Zawodnik, który zyskał pozycję wskutek opuszczenia toru, ma obowiązek oddać ją przy najbliższej bezpiecznej okazji.": "Zawodnik, który zyskał pozycję wskutek opuszczenia toru, ma obowiązek **oddać ją** przy najbliższej bezpiecznej okazji.",
+        "Zabrania się: celowego rozbijania pojazdu, ścinania tabliczek przed zakrętami, jazdy w przeciwnym kierunku, korzystania z opcji „Powrót na tor\", używania „Opuść sesję\" lub „Wyjdź z gry\" podczas przebywania na torze, jazdy na bocie podczas startu i wyścigu, zatrzymywania pojazdu na torze bez uzasadnionej przyczyny, samosądu podczas zawodów.": "**Zabrania się:**\n– celowego rozbijania pojazdu,\n– ścinania tabliczek przed zakrętami,\n– jazdy w przeciwnym kierunku,\n– korzystania z opcji „Powrót na tor\",\n– używania „Opuść sesję\" lub „Wyjdź z gry\" podczas przebywania na torze,\n– jazdy na bocie podczas startu i wyścigu,\n– zatrzymywania pojazdu na torze bez uzasadnionej przyczyny,\n– **samosądu** podczas zawodów.",
+        "Zarząd Ligi zastrzega sobie prawo do wprowadzania zmian w regulaminie w trakcie sezonu. O wszelkich zmianach uczestnicy zostaną poinformowani na Discordzie Ligi.": "Zarząd Ligi zastrzega sobie prawo do **wprowadzania zmian w regulaminie** w trakcie sezonu. O wszelkich zmianach uczestnicy zostaną poinformowani na **Discordzie Ligi**.",
+        "W sytuacjach nieuregulowanych niniejszym regulaminem Zarząd podejmuje decyzję według własnego uznania, adekwatnie do okoliczności.": "W sytuacjach nieuregulowanych niniejszym regulaminem **Zarząd podejmuje decyzję według własnego uznania**, adekwatnie do okoliczności."
+    };
 
     function injectExtra2335() {
         const tabs = Array.from(document.querySelectorAll('.reg-tab'));
@@ -1303,7 +1420,9 @@
                 (rp.items || rp.entries || []).forEach(item => {
                     // backwards-compat: old format had {text} only (entries)
                     const type = item.type || 'entry';
-                    const text = item.text || '';
+                    let text = item.text || '';
+                    // jednorazowo: pogrubienia dla wpisów zapisanych, zanim je wprowadzono
+                    if (type !== 'h3' && !data.boldV1 && REG_BOLD_MAP[text.trim()]) text = REG_BOLD_MAP[text.trim()];
                     if (type === 'h3') {
                         const hw = document.createElement('div');
                         hw.className = 'reg-h3-wrap';
@@ -1467,6 +1586,9 @@
                 <input type="text" class="edit-input limit-desc-input" value="${escAttr(descSpan.innerText)}">`;
         });
 
+        // Przycisk B (pogrubienie) i podgląd pod każdym wpisem regulaminu
+        document.querySelectorAll('.reg-entry').forEach(addRegEditorTools);
+
         // Sync reg entry textareas with display text
         document.querySelectorAll('.reg-entry').forEach(entry => {
             const display = entry.querySelector('.reg-entry-text.display-only');
@@ -1623,6 +1745,7 @@
         });
         payload.regPanels = regPanels;
         payload.extra2335 = true; // nr 23–35 są już w zapisanym regulaminie
+        payload.boldV1    = true; // pogrubienia (**…**) są już w zapisanym regulaminie
         return payload;
     }
 
@@ -1746,6 +1869,7 @@
             <textarea class="reg-entry-edit reg-entry-textarea">Nowy wpis regulaminu</textarea>
             <button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button>`;
         btn.parentNode.insertBefore(entry, btn);
+        addRegEditorTools(entry);
     }
 
     // ── HELPERS ──
@@ -1771,9 +1895,23 @@
             // „5–20s oraz 3–5 PK" / „3 sek. + 1–3 PK" → dwa chipy obok siebie
             .replace(/(<\/span>)\s*(?:oraz|and|\+|,)?\s*(?=<span class="reg-chip)/g, '$1');
     }
+    // ── POGRUBIENIA ──
+    // W polu edycji pogrubienie zapisuje się jako **tekst**; na stronie zamieniamy je na <b>tekst</b>.
+    function boldify(html) { return String(html || '').replace(/\*\*([^\n]+?)\*\*/g, '<b>$1</b>'); }
+    const nl2br = h => h.replace(/\n/g, '<br>');
+
     function formatRegEntry(text, lang) {
         lang = lang || 'pl';
         const t  = String(text || '').trim();
+        // Wpis z ręcznymi pogrubieniami: pogrubione jest dokładnie to, co zaznaczył admin.
+        if (t.includes('**')) {
+            const html = chipifyPenalties(escHtml(t), lang)
+                .replace(/:\s*(?:kara|penalty|a penalty of)?\s*(?=<span class="reg-chip)/i, ' ')  // „Tytuł: kara <chip>" → „Tytuł <chip>"
+                .replace(/(<\/span>)\s*\(([^()]*)\)\.?\s*$/, '$1 — $2')                        // „(uwaga)" na końcu
+                .replace(/(<\/span>)\.\s+/, '$1 — ');                                          // „DSQ. Wyjątki: …"
+            return nl2br(boldify(html));
+        }
+        // Wpis bez pogrubień: tytuł przed „:" pogrubiamy automatycznie.
         const ci = t.indexOf(':');
         if (ci > 0 && ci <= 120) {
             const title = escHtml(t.slice(0, ci).trim());
@@ -1783,12 +1921,91 @@
                 rest = rest
                     .replace(/(<\/span>)\s*\(([^()]*)\)\.?\s*$/, '$1 — $2')   // „(uwaga)" na końcu
                     .replace(/(<\/span>)\.\s+/, '$1 — ');                     // „DSQ. Wyjątki: …"
-                return `<b>${title}</b> ${rest}`;
+                return nl2br(`<b>${title}</b> ${rest}`);
             }
-            return `<b>${title}:</b> ${rest}`;
+            return nl2br(`<b>${title}:</b> ${rest}`);
         }
-        return chipifyPenalties(escHtml(t), lang);
+        return nl2br(chipifyPenalties(escHtml(t), lang));
     }
+
+    // Edytor: przycisk B (i Ctrl+B) przy każdym wpisie + podgląd pod polem.
+    function addRegEditorTools(entry) {
+        if (!entry || entry.querySelector('.reg-bold-btn')) return;
+        const ta = entry.querySelector('.reg-entry-textarea');
+        if (!ta) return;
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'reg-bold-btn';
+        b.title = 'Pogrub zaznaczony tekst (Ctrl+B)';
+        b.innerHTML = '<b>B</b>';
+        b.addEventListener('mousedown', e => e.preventDefault());   // nie zabieraj zaznaczenia z pola
+        b.addEventListener('click', () => toggleBold(ta));
+        entry.appendChild(b);
+        const pv = document.createElement('div');
+        pv.className = 'reg-entry-preview';
+        ta.insertAdjacentElement('afterend', pv);
+        updateRegPreview(ta);
+        autoGrow(ta);
+    }
+
+    function updateRegPreview(ta) {
+        const pv = ta.parentElement && ta.parentElement.querySelector('.reg-entry-preview');
+        if (pv) pv.innerHTML = formatRegEntry(ta.value);
+    }
+
+    function autoGrow(ta) {
+        if (!ta.offsetParent) return;          // pole w ukrytej zakładce — dopasujemy przy kliknięciu
+        ta.style.height = 'auto';
+        ta.style.height = Math.max(60, ta.scrollHeight + 2) + 'px';
+    }
+
+    // Zaznaczony tekst → **tekst**; ponowne użycie zdejmuje pogrubienie.
+    function toggleBold(ta) {
+        const v = ta.value;
+        const caret = ta.selectionStart;
+        let s = ta.selectionStart, e = ta.selectionEnd;
+        while (s < e && /\s/.test(v[s]))     s++;
+        while (e > s && /\s/.test(v[e - 1])) e--;
+        if (s === e) {                                   // brak zaznaczenia → całe słowo pod kursorem
+            const W = /[0-9A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż„”"'%–\-\/]/;
+            while (s > 0 && W.test(v[s - 1]))  s--;
+            while (e < v.length && W.test(v[e])) e++;
+        }
+        let repl, selStart, selEnd;
+        if (s === e) {                                   // pusto → wstaw znaczniki i ustaw kursor między nimi
+            s = e = caret; repl = '****'; selStart = selEnd = caret + 2;
+        } else if (v.slice(s - 2, s) === '**' && v.slice(e, e + 2) === '**') {
+            s -= 2; e += 2; repl = v.slice(s + 2, e - 2); selStart = s; selEnd = s + repl.length;
+        } else {
+            const sel = v.slice(s, e);
+            if (sel.length > 4 && sel.startsWith('**') && sel.endsWith('**')) {
+                repl = sel.slice(2, -2); selStart = s; selEnd = s + repl.length;
+            } else {
+                repl = '**' + sel.replace(/\*\*/g, '') + '**'; selStart = s + 2; selEnd = s + repl.length - 2;
+            }
+        }
+        ta.focus();
+        ta.setSelectionRange(s, e);
+        let done = false;
+        try { done = document.execCommand('insertText', false, repl); } catch (_) {}   // zachowuje Ctrl+Z
+        if (!done || ta.value.slice(s, s + repl.length) !== repl) ta.setRangeText(repl, s, e, 'end');
+        ta.setSelectionRange(selStart, selEnd);
+        ta.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+
+    document.addEventListener('keydown', e => {
+        if ((e.ctrlKey || e.metaKey) && !e.altKey && (e.key === 'b' || e.key === 'B') &&
+            e.target.classList && e.target.classList.contains('reg-entry-textarea')) {
+            e.preventDefault();
+            toggleBold(e.target);
+        }
+    });
+    document.addEventListener('input', e => {
+        if (e.target.classList && e.target.classList.contains('reg-entry-textarea')) { updateRegPreview(e.target); autoGrow(e.target); }
+    });
+    document.addEventListener('focusin', e => {
+        if (e.target.classList && e.target.classList.contains('reg-entry-textarea')) autoGrow(e.target);
+    });
 
     // ── DEFAULT DATA ──
     function renderDefaultStructure() {
@@ -1898,8 +2115,21 @@
     }
 
     // ── FORMATOWANIE (Markdown Discorda) ──
+    // Układ na kanale:
+    //   1. wiadomość: duży tytuł ligi + karta ze spisem treści (linki do rozdziałów) i datą aktualizacji,
+    //   potem każda zakładka regulaminu jako osobna wiadomość z nagłówkiem „## …”,
+    //   w niej każda sekcja (nagłówek z panelu) to osobna karta. Wpisy typu „Przewinienie: kara”
+    //   lądują w polach (nazwa pogrubiona, pod nią kara i uwagi), zwykłe zdania jako punkty ▸.
     function dcEsc(s)        { return String(s || '').replace(/([\\*_~`|])/g, '\\$1'); }
     function dcTrunc(s, max) { s = String(s || ''); return s.length > max ? s.slice(0, max - 1) + '…' : s; }
+    function dcCap(s)        { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+
+    // escapuje znaki Markdown, ale zostawia pogrubienia **…** wpisane w regulaminie
+    function dcFmt(s) {
+        return String(s || '').split(/\*\*([^\n]*?)\*\*/)
+            .map((part, i) => i % 2 ? (part.trim() ? '**' + dcEsc(part) + '**' : '') : dcEsc(part))
+            .join('');
+    }
 
     // kary czasowe, PK i DSQ jako `wyróżnione` fragmenty — odpowiednik chipów ze strony
     function dcChips(s) {
@@ -1911,104 +2141,135 @@
             .replace(/\bDSQ\b/g, '`DSQ`');
     }
 
-    // „Tytuł: kara 5–20s oraz 3–5 PK” → „**Tytuł** — `5–20 s` oraz `3–5 PK`”
-    function dcEntry(text) {
-        const t  = String(text || '').trim();
-        const ci = t.indexOf(':');
-        if (ci > 0 && ci <= 120 && t[ci + 1] !== '/' && !t.slice(0, ci).includes('\n')) {
-            const title = dcEsc(t.slice(0, ci).trim());
-            const rest  = dcChips(dcEsc(t.slice(ci + 1).trim())).replace(/^kara\s+(?=`)/i, '');
-            return rest.startsWith('`') ? `**${title}** — ${rest}` : `**${title}:** ${rest}`;
+    // „Tytuł: reszta” → { title, rest }. Dwukropek wewnątrz pogrubienia („**Tytuł:** …”) też się liczy.
+    function dcSplitEntry(t) {
+        const lim = Math.min(t.length, 200);
+        for (let i = 0; i < lim; i++) {
+            if (t[i] === '\n') break;
+            if (t[i] !== ':' || t[i + 1] === '/') continue;
+            const before = t.slice(0, i);
+            const marks  = (before.match(/\*\*/g) || []).length;
+            let sp = null;
+            if (marks % 2 === 0)              sp = { title: before.trim(),          rest: t.slice(i + 1).trim() };
+            else if (t.startsWith('**', i + 1)) sp = { title: (before + '**').trim(), rest: t.slice(i + 3).trim() };
+            if (sp) return (sp.rest && sp.title.replace(/\*\*/g, '').trim()) ? sp : null;
         }
-        return dcChips(dcEsc(t));
+        return null;
     }
 
-    // Dzieli długą sekcję na kilka bloków (embedów) — nagłówek nigdy nie zostaje sam na końcu bloku.
-    function dcChunkEmbeds(title, lines, color) {
-        const embeds = [];
-        const make = (arr) => ({
-            title: dcTrunc(embeds.length ? `${title} (cd.)` : title, 256),
-            description: arr.map(l => l.text).join('\n').trim(),
-            color
-        });
-        let cur = [], len = 0;
-        lines.forEach(l => {
-            const text = dcTrunc(l.text, DC_MAX_LINE);
-            if (cur.length && len + text.length + 1 > DC_MAX_DESC) {
-                const carry = [];
-                while (cur.length && cur[cur.length - 1].head) carry.unshift(cur.pop());
-                if (cur.length) embeds.push(make(cur));
-                cur = carry;
-                len = cur.reduce((a, x) => a + x.text.length + 1, 0);
+    // wartość pola: „`5–20 s` + `3–5 PK`”, a uwagi z nawiasu / po kropce w nowej linii kursywą
+    function dcPenaltyValue(rest) {
+        let v = dcChips(dcFmt(rest)).replace(/^kara\s+(?=`)/i, '');
+        v = v.replace(/(`[^`\n]+`)\s+oraz\s+(?=`)/g, '$1 + ');
+        const m = v.match(/^((?:`[^`\n]+`(?:\s*(?:\+|lub|,)\s*(?=`))?)+)([\s\S]*)$/);
+        if (m) {
+            let note = m[2].trim().replace(/^[.,;:]\s*/, '');
+            const pm = note.match(/^\(([\s\S]*)\)\.?$/);
+            if (pm) note = pm[1].trim();
+            if (!note) return m[1].trim();
+            note = dcCap(note);
+            return m[1].trim() + '\n' + (/[*_\n]/.test(note) ? note : `*${note}*`);
+        }
+        return dcCap(v.trim()) || '—';
+    }
+
+    // jeden punkt listy (sekcje ze zwykłymi zdaniami)
+    function dcLine(t) {
+        t = String(t || '').trim();
+        if (!t.includes('**')) {          // wpis bez pogrubień: tytuł przed „:” pogrubiamy automatycznie
+            const sp = dcSplitEntry(t);
+            if (sp && sp.title.length <= 120) {
+                const rest = dcChips(dcFmt(sp.rest)).replace(/^kara\s+(?=`)/i, '');
+                return rest.startsWith('`') ? `**${dcEsc(sp.title)}** — ${rest}` : `**${dcEsc(sp.title)}:** ${rest}`;
             }
-            cur.push({ text, head: !!l.head });
-            len += text.length + 1;
-        });
-        if (cur.length) embeds.push(make(cur));
-        return embeds;
+        }
+        return dcChips(dcFmt(t)).replace(/\*\*:\s*(?:kara\s+)?(?=`)/i, '** — ');
     }
 
-    function buildDiscordEmbeds(p, sections) {
-        const embeds = [];
+    function dcCardTitle(title, n) { return title ? { title: dcTrunc(n ? `${title} (cd.)` : title, 256) } : {}; }
+
+    function dcFieldEmbeds(title, fields, color) {
+        const out = [];
+        let cur = [], size = 0;
+        const push = () => { out.push(Object.assign(dcCardTitle(title, out.length), { color, fields: cur })); cur = []; size = 0; };
+        fields.forEach(f => {
+            const s = f.name.length + f.value.length;
+            if (cur.length && (cur.length >= 25 || size + s > 5000)) push();
+            cur.push(f); size += s;
+        });
+        if (cur.length) push();
+        return out;
+    }
+
+    function dcDescEmbeds(title, lines, sep, color) {
+        const out = [];
+        let cur = [], len = 0;
+        const push = () => { out.push(Object.assign(dcCardTitle(title, out.length), { color, description: cur.join(sep) })); cur = []; len = 0; };
+        lines.forEach(l => {
+            l = dcTrunc(l, DC_MAX_LINE);
+            if (cur.length && len + l.length + sep.length > DC_MAX_DESC) push();
+            cur.push(l); len += l.length + sep.length;
+        });
+        if (cur.length) push();
+        return out;
+    }
+
+    // Sekcja = karta. Gdy każdy wpis ma postać „Nazwa: kara/opis” → pola; inaczej lista punktów.
+    function dcSectionEmbeds(heading, entries, color) {
+        const splits = entries.map(dcSplitEntry);
+        if (splits.every(Boolean)) {
+            const fields = splits.map(sp => ({
+                name:   dcTrunc(sp.title.replace(/\*\*/g, '').trim(), 256),
+                value:  dcPenaltyValue(sp.rest),
+                inline: false
+            }));
+            if (fields.every(f => f.value.length <= 1024)) return dcFieldEmbeds(heading, fields, color);
+        }
+        const compact = entries.every(t => t.length <= 90 && !t.includes('\n'));   // krótkie punkty bez pustych linii
+        return dcDescEmbeds(heading, entries.map(t => '▸ ' + dcLine(t)), compact ? '\n' : '\n\n', color);
+    }
+
+    const DC_DOTS = [['🟡', '#f0c030'], ['🟠', '#f07020'], ['🔴', '#e02030'], ['🟣', '#a040e0'], ['🔵', '#2080ff'], ['🟢', '#2ecc71'], ['⚪', '#ffffff']];
+    function dcDot(style) {
+        const m = String(style || '').match(/#([0-9a-f]{6}|[0-9a-f]{3})\b/i);
+        if (!m) return '▪️';
+        let h = m[1];
+        if (h.length === 3) h = h.split('').map(c => c + c).join('');
+        const rgb = [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16));
+        let best = '▪️', bd = Infinity;
+        DC_DOTS.forEach(([emoji, hex]) => {
+            const d = [1, 3, 5].reduce((a, i, k) => a + (parseInt(hex.slice(i, i + 2), 16) - rgb[k]) ** 2, 0);
+            if (d < bd) { bd = d; best = emoji; }
+        });
+        return best;
+    }
+
+    function dcLeagueName(p) {
+        return String((p.header || {}).title || '').split('\n').map(s => s.trim()).filter(Boolean).join(' ') || 'Regulamin ligi';
+    }
+
+    // Wiadomość nr 1: tytuł ligi, spis treści z linkami do rozdziałów, link do strony, data aktualizacji.
+    function dcHeaderMessage(p, toc, linkOf, stamp) {
         const h = p.header || {};
-        const leagueName = String(h.title || '').split('\n').map(s => s.trim()).filter(Boolean).join(' ') || 'Regulamin ligi';
         const pageUrl = /^https?:$/.test(location.protocol) ? location.origin + location.pathname : '';
-
-        // nagłówek
-        const intro = [];
-        if (h.subtitle) intro.push(`**${dcEsc(h.subtitle)}**`);
-        if (h.badge)    intro.push(dcEsc(h.badge));
-        if (pageUrl)    intro.push(`\n🔗 [Pełna wersja online](${pageUrl})`);
-        const head = { title: dcTrunc('🏁 ' + leagueName, 256), color: 0x2080ff };
-        if (intro.length) head.description = intro.join('\n');
-        if (pageUrl) head.url = pageUrl;
-        embeds.push(head);
-
-        // kategorie naruszeń (karty)
-        if (sections.cats) {
-            (p.categories || []).forEach(cat => {
-                const lines = (cat.rules || [])
-                    .filter(r => String(r.title || '').trim())
-                    .map(r => ({ text: '• **' + dcEsc(r.title.trim()) + '**' + (String(r.penalty || '').trim() ? ' — ' + dcChips(dcEsc(r.penalty.trim())) : '') }));
-                if (!lines.length) return;
-                const color = parseInt((COLOR_HEX[cat.categoryClass] || '#2080ff').slice(1), 16);
-                embeds.push(...dcChunkEmbeds(`${cat.icon || '⚠️'} ${cat.headerText || ''}`.trim(), lines, color));
+        const lines = [];
+        if (h.badge) lines.push(dcEsc(h.badge));
+        if (toc.length) {
+            lines.push('', '**📑 Spis treści**');
+            toc.forEach(t => {
+                const label = dcEsc(t.label).replace(/[\[\]]/g, '');
+                const url = linkOf(t.index);
+                lines.push(url ? `▸ [${label}](${url})` : `▸ ${label}`);
             });
         }
-
-        // pełny regulamin — każda zakładka jako osobny blok
-        if (sections.reg) {
-            (p.regPanels || []).forEach((rp, i) => {
-                const lines = [];
-                (rp.items || []).forEach(it => {
-                    const t = String(it.text || '').trim();
-                    if (!t) return;
-                    if (it.type === 'h3') lines.push({ text: '\n**__' + dcTrunc(dcEsc(t), 200) + '__**', head: true });
-                    else                  lines.push({ text: '• ' + dcEntry(t) });
-                });
-                if (!lines.length) return;
-                embeds.push(...dcChunkEmbeds(`${rp.icon || '📋'} ${rp.label || 'Regulamin'}`.trim(), lines, DC_TAB_COLORS[i % DC_TAB_COLORS.length]));
-            });
-        }
-
-        // system punktów karnych
-        const limits = (p.limits || []).filter(l => String(l.pkText || '').trim());
-        if (sections.limits && limits.length) {
-            embeds.push({
-                title: dcTrunc('🚦 ' + (p.footerTitle || 'System Punktów Karnych'), 256),
-                color: 0xa040e0,
-                fields: limits.slice(0, 25).map(l => ({
-                    name:   dcTrunc(dcEsc(l.pkText.trim()), 256),
-                    value:  dcTrunc(dcEsc(String(l.descText || '').trim()) || '​', 1024),
-                    inline: true
-                }))
-            });
-        }
-
-        const last = embeds[embeds.length - 1];
-        last.footer    = { text: dcTrunc(leagueName + ' • ostatnia aktualizacja', 2048) };
-        last.timestamp = new Date().toISOString();
-        return embeds;
+        if (pageUrl) lines.push('', `🔗 [Pełna wersja na stronie](${pageUrl})`);
+        const embed = { title: dcTrunc(h.subtitle || 'Regulamin', 256), color: 0x2080ff };
+        if (pageUrl) embed.url = pageUrl;
+        const desc = lines.join('\n').trim();
+        if (desc) embed.description = desc;
+        embed.footer    = { text: 'Ostatnia aktualizacja' };
+        embed.timestamp = stamp;
+        return { content: dcTrunc('# 🏁 ' + dcLeagueName(p), 1900), embeds: [embed], allowed_mentions: { parse: [] } };
     }
 
     function dcEmbedSize(e) {
@@ -2016,21 +2277,79 @@
              + (e.fields || []).reduce((a, f) => a + f.name.length + f.value.length, 0);
     }
 
-    // Pakuje bloki w wiadomości: max 10 bloków i ~6000 znaków na wiadomość.
-    function buildDiscordMessages(payload, sections) {
-        const msgs = [];
-        let cur = [], size = 0;
-        buildDiscordEmbeds(payload, sections).forEach(e => {
-            const s = dcEmbedSize(e);
-            if (cur.length && (cur.length >= DC_MAX_EMBEDS || size + s > DC_MAX_MSG_CHARS)) {
-                msgs.push({ embeds: cur });
+    // Cały plan publikacji: lista wiadomości (max 10 kart i ~6000 znaków każda) + spis treści.
+    function buildDiscordPlan(p, sections, linkOf, stamp) {
+        const groups = [];   // rozdziały: { label, embeds }
+
+        if (sections.cats) {
+            const embeds = [];
+            (p.categories || []).forEach(cat => {
+                const rules = (cat.rules || []).filter(r => String(r.title || '').trim());
+                if (!rules.length) return;
+                const color  = parseInt((COLOR_HEX[cat.categoryClass] || '#2080ff').slice(1), 16);
+                const fields = rules.map(r => ({
+                    name:   dcTrunc(r.title.replace(/\*\*/g, '').trim(), 256),
+                    value:  dcTrunc(String(r.penalty || '').trim() ? dcPenaltyValue(r.penalty.trim()) : '—', 1024),
+                    inline: false
+                }));
+                embeds.push(...dcFieldEmbeds(`${cat.icon || '⚠️'} ${cat.headerText || ''}`.trim(), fields, color));
+            });
+            if (embeds.length) groups.push({ label: '📂 ' + (p.sectionLabel || 'Kategorie naruszeń'), embeds });
+        }
+
+        if (sections.reg) {
+            (p.regPanels || []).forEach((rp, i) => {
+                const color = DC_TAB_COLORS[i % DC_TAB_COLORS.length];
+                const secs = [];
+                let cur = { heading: '', entries: [] };
+                (rp.items || []).forEach(it => {
+                    const t = String(it.text || '').trim();
+                    if (!t) return;
+                    if (it.type === 'h3') { secs.push(cur); cur = { heading: t, entries: [] }; }
+                    else cur.entries.push(t);
+                });
+                secs.push(cur);
+                const embeds = secs.filter(s => s.entries.length).flatMap(s => dcSectionEmbeds(s.heading, s.entries, color));
+                if (embeds.length) groups.push({ label: `${rp.icon || '📋'} ${rp.label || 'Regulamin'}`.trim(), embeds });
+            });
+        }
+
+        const limits = (p.limits || []).filter(l => String(l.pkText || '').trim());
+        if (sections.limits && limits.length) {
+            groups.push({
+                label: '🚦 ' + (p.footerTitle || 'System Punktów Karnych'),
+                embeds: [{
+                    color: 0xa040e0,
+                    description: limits.map(l => {
+                        const desc = dcEsc(String(l.descText || '').trim());
+                        return `${dcDot(l.pkStyle)} \`${String(l.pkText).trim().replace(/`/g, '')}\`` + (desc ? ` ➜ **${desc}**` : '');
+                    }).join('\n')
+                }]
+            });
+        }
+
+        const messages = [null];   // [0] = wiadomość tytułowa (spis treści)
+        const toc = [];
+        groups.forEach(g => {
+            toc.push({ label: g.label, index: messages.length });
+            let cur = [], size = 0, part = 0;
+            const flush = () => {
+                messages.push({
+                    content: dcTrunc(part++ ? `### ${g.label} (cd.)` : `## ${g.label}`, 1900),
+                    embeds: cur,
+                    allowed_mentions: { parse: [] }   // żadnych pingów (@everyone itp.) z treści regulaminu
+                });
                 cur = []; size = 0;
-            }
-            cur.push(e); size += s;
+            };
+            g.embeds.forEach(e => {
+                const s = dcEmbedSize(e);
+                if (cur.length && (cur.length >= DC_MAX_EMBEDS || size + s > DC_MAX_MSG_CHARS)) flush();
+                cur.push(e); size += s;
+            });
+            if (cur.length) flush();
         });
-        if (cur.length) msgs.push({ embeds: cur });
-        // allowed_mentions: żadnych pingów (@everyone itp.) z treści regulaminu
-        return msgs.map(m => Object.assign(m, { allowed_mentions: { parse: [] } }));
+        messages[0] = dcHeaderMessage(p, toc, linkOf, stamp);
+        return { messages, toc };
     }
 
     // ── ZAPYTANIA DO DISCORDA ──
@@ -2075,15 +2394,30 @@
 
     // Publikuje regulamin. Domyślnie edytuje wcześniej wysłane wiadomości (kanał się nie zaśmieca);
     // fresh = true → usuwa stare i wysyła wszystko od nowa na dół kanału.
+    // serwer i kanał webhooka — potrzebne do linków w spisie treści
+    async function dcWebhookInfo(hook) {
+        try {
+            const res = await dcRequest('GET', hook.base);
+            if (!res.ok) return null;
+            const j = await res.json();
+            return j.guild_id ? { guild: j.guild_id, channel: hook.thread || j.channel_id } : null;
+        } catch (_) { return null; }
+    }
+
     async function syncDiscord(payload, opts = {}) {
         const hook = dcParseWebhook(discordCfg.webhook);
         if (!hook) throw new Error('najpierw wklej poprawny link webhooka.');
-        const messages = buildDiscordMessages(payload, discordCfg.sections);
         const progress = opts.onProgress || (() => {});
         let oldIds = (discordCfg.messagesWebhook === hook.key) ? discordCfg.messageIds.slice() : [];
         let fresh  = !!opts.fresh;
         const newIds = [];
         let posting = false;
+
+        const info    = await dcWebhookInfo(hook);
+        const stamp   = new Date().toISOString();
+        const linkFor = ids => idx => (info && ids[idx]) ? `https://discord.com/channels/${info.guild}/${info.channel}/${ids[idx]}` : null;
+        const plan     = buildDiscordPlan(payload, discordCfg.sections, linkFor(fresh ? [] : oldIds), stamp);
+        const messages = plan.messages;
 
         try {
             if (!fresh) {
@@ -2114,6 +2448,13 @@
 
             // regulamin się skrócił → usuń nadmiarowe stare wiadomości
             await dcDeleteMessages(hook, oldIds.slice(messages.length));
+
+            // spis treści: linki muszą wskazywać na ostateczne wiadomości (np. po pierwszej publikacji)
+            const header = dcHeaderMessage(payload, plan.toc, linkFor(newIds), stamp);
+            if (JSON.stringify(header) !== JSON.stringify(messages[0])) {
+                await dcSleep(DC_DELAY);
+                await dcRequest('PATCH', dcUrl(hook, '/messages/' + newIds[0]), header);   // błąd tu nie jest krytyczny
+            }
         } catch (e) {
             if (posting) {   // zapamiętaj to, co już jest na kanale, żeby następna próba to edytowała
                 discordCfg.messageIds = newIds.slice();
@@ -2399,34 +2740,6 @@
         "<b>Celowe unikanie odpowiedzialności za przewinienie</b> (np. opuszczenie sesji w celu uniknięcia kary) <span class=\"reg-chip chip-pk\">3–6 PK</span> — możliwa dodatkowa kara od sędziów":
             "<b>Deliberately evading responsibility for an offense</b> (e.g. leaving the session to avoid a penalty) <span class=\"reg-chip chip-pk\">3–6 PP</span> — the stewards may impose an additional penalty",
 
-        // TAB 0 — przewinienia nr 23–35 (wersja tekstowa, po zapisie do Firebase)
-        "Powtarzające się przekraczanie limitów toru, jeśli gra nie naliczyła kary: 3–5s oraz 1–3 PK (zależnie od skali przewinienia)":
-            "Repeatedly exceeding track limits, if the game did not apply a penalty: 3–5s and 1–3 PP (depending on the severity of the violation)",
-        "Ścięcie zakrętu i uzyskanie dzięki temu przewagi: 5–10s oraz 1–3 PK (obowiązek oddania pozycji, jeśli sędziowie tak zdecydują)":
-            "Cutting a corner and gaining an advantage from it: 5–10s and 1–3 PP (the position must be given back if the stewards so decide)",
-        "Wyprzedzanie podczas SC/VSC w sytuacji, gdy jest zabronione: 5–10s oraz 2–5 PK (w poważnych przypadkach możliwa DSQ)":
-            "Overtaking under SC/VSC when it is not allowed: 5–10s and 2–5 PP (DSQ possible in serious cases)",
-        "Nierespektowanie żółtych flag i brak odpowiedniego zwolnienia: 5–10s oraz 2–5 PK (zależnie od zagrożenia)":
-            "Ignoring yellow flags and failing to slow down sufficiently: 5–10s and 2–5 PP (depending on the level of danger)",
-        "Ignorowanie niebieskich flag i utrudnianie bezpiecznego dublowania: 3–5s oraz 1–3 PK (przy powtarzaniu przewinienia kara może wzrosnąć)":
-            "Ignoring blue flags and hindering safe lapping: 3–5s and 1–3 PP (the penalty may increase for repeat offenses)",
-        "Zmiana toru jazdy podczas hamowania, powodująca zagrożenie lub kolizję: 5–10s oraz 2–5 PK (przy poważnym incydencie możliwa dodatkowa kara)":
-            "Changing line under braking, causing danger or a collision: 5–10s and 2–5 PP (an additional penalty is possible for a serious incident)",
-        "Wielokrotna zmiana kierunku jazdy w celu obrony pozycji: 3–10s oraz 1–4 PK (zależnie od stopnia zagrożenia)":
-            "Repeatedly changing direction to defend a position: 3–10s and 1–4 PP (depending on the level of danger)",
-        "Niebezpieczny wyjazd z alei serwisowej i zajechanie drogi innemu kierowcy: 5–10s oraz 2–5 PK (możliwa dodatkowa kara za spowodowanie kolizji)":
-            "Unsafe pit lane exit and cutting across another driver: 5–10s and 2–5 PP (an additional penalty for causing a collision is possible)",
-        "Przekroczenie dozwolonej prędkości w alei serwisowej, jeśli nie ukarała za to gra: 3–5s oraz 1–3 PK (zależnie od skali przekroczenia)":
-            "Exceeding the pit lane speed limit, if the game did not penalize it: 3–5s and 1–3 PP (depending on how far the limit was exceeded)",
-        "Nieoddanie pozycji po uzyskaniu jej w sposób niezgodny z regulaminem: 5s oraz 1–3 PK (kara może zostać zwiększona przy uzyskaniu większej przewagi)":
-            "Failing to give back a position gained in breach of the rules: 5s and 1–3 PP (the penalty may be increased if a larger advantage was gained)",
-        "Niebezpieczne zachowanie podczas restartu po SC, powodujące zagrożenie dla innych kierowców: 3–10s oraz 1–4 PK (zależnie od skutków incydentu)":
-            "Dangerous behavior during an SC restart, endangering other drivers: 3–10s and 1–4 PP (depending on the consequences of the incident)",
-        "Celowe utrudnianie wyścigu innemu kierowcy bez uzasadnienia sportowego: 5–15s oraz 2–6 PK (w poważnych przypadkach możliwa DSQ)":
-            "Deliberately obstructing another driver's race without sporting justification: 5–15s and 2–6 PP (DSQ possible in serious cases)",
-        "Celowe unikanie odpowiedzialności za przewinienie, np. opuszczenie sesji w celu uniknięcia kary: 3–6 PK (możliwa dodatkowa kara od sędziów)":
-            "Deliberately evading responsibility for an offense, e.g. leaving the session to avoid a penalty: 3–6 PP (the stewards may impose an additional penalty)",
-
         // TAB 1 — Błędy Gry
         "Kary przyznane przez grę F1 25 <b>nie podlegają protestowi</b>, chyba że zostały nałożone w wyniku błędu gry lub w sytuacji walki o pozycję, gdy opuszczenie toru było najrozsądniejszą decyzją w celu uniknięcia kolizji. Wymagany materiał wideo jako dowód.":
             "Penalties given by the F1 25 game <b>cannot be appealed</b>, unless they were imposed due to a game error or in a battle for position where leaving the track was the most reasonable choice to avoid a collision. Video evidence is required.",
@@ -2506,6 +2819,76 @@
             "The League Board reserves the right to <b>make changes to these rules</b> during the season. Participants will be informed of any changes on the <b>League Discord</b>.",
         "W sytuacjach nieuregulowanych niniejszym regulaminem <b>Zarząd podejmuje decyzję według własnego uznania</b>, adekwatnie do okoliczności.":
             "In situations not covered by these rules, the <b>Board will decide at its own discretion</b>, as appropriate to the circumstances."
+    };
+
+    // ── wpisy regulaminu (tekst źródłowy z **pogrubieniami**) → angielski ──
+    const DICT_SRC = {
+        "**Brake check** (nagłe, nieuzasadnione hamowanie): kara 5–20s oraz 3–5 PK": "**Brake check** (sudden, unjustified braking): penalty 5–20s and 3–5 PP",
+        "**Zwiększanie czasu delta podczas VSC/SC**: 3–5s oraz 1–5 PK": "**Increasing delta time during VSC/SC**: 3–5s and 1–5 PP",
+        "**Blokowanie w kwalifikacjach**: 1–3 PK": "**Blocking in qualifying**: 1–3 PP",
+        "**Spowodowanie kolizji**: 3–10s oraz 1–5 PK": "**Causing a collision**: 3–10s and 1–5 PP",
+        "**Wypychanie poza tor**: 3s oraz 1–3 PK": "**Forcing off track**: 3s and 1–3 PP",
+        "**Użycie funkcji „Powrót na tor\"**: DSQ. Wyjątki: niemożność kontynuowania jazdy, okrążenie formujące, kwalifikacje.": "**Use of the “Return to Track” feature**: DSQ. Exceptions: inability to continue driving, formation lap, qualifying.",
+        "**Agresywny divebomb** (atak z dużej odległości): 3–10s oraz 1–6 PK": "**Aggressive divebomb** (attack from long range): 3–10s and 1–6 PP",
+        "**Nierespektowanie overlapu** przez kierowcę będącego z przodu: 1–3 PK": "**Not respecting overlap** by the driver in front: 1–3 PP",
+        "**Niebezpiecznie wolna jazda podczas restartu po SC**: 1–3 PK": "**Dangerously slow driving during an SC restart**: 1–3 PP",
+        "**Wycofanie się z sesji na torze**: 6 PK": "**Withdrawing from a session while on track**: 6 PP",
+        "**Celowe rozbicie bolidu** (dotyczy również linii mety na ostatnim okrążeniu): 3–8 PK": "**Deliberately crashing the car** (also applies on the finish line on the last lap): 3–8 PP",
+        "**Próba celowego wywołania SC**: kara według uznania FIA": "**Attempting to deliberately trigger a Safety Car**: penalty at the FIA's discretion",
+        "**Jazda na SI**: 1–3 PK lub DSQ (w zależności od długości i szkodliwości naruszenia)": "**Driving on AI assist**: 1–3 PP or DSQ (depending on the duration and severity of the violation)",
+        "**Przecięcie linii wjazdu lub zjazdu do alei serwisowej** jakimkolwiek kołem: 3–5s oraz 1–2 PK (w zależności od szkodliwości; nie dotyczy sytuacji objętych wcześniejszą dyrektywą wyścigową)": "**Crossing the pit lane entry or exit line** with any wheel: 3–5s and 1–2 PP (depending on severity; does not apply to situations covered by an earlier race directive)",
+        "**Niebezpieczny powrót na tor**: 3–10s oraz 1–5 PK": "**Dangerous return to track**: 3–10s and 1–5 PP",
+        "**Niebezpieczna zmiana linii jazdy**: 3–5s oraz 1–5 PK": "**Dangerous line change**: 3–5s and 1–5 PP",
+        "**Wyprzedzanie podczas okrążenia formującego**: kara według uznania FIA": "**Overtaking during the formation lap**: penalty at the FIA's discretion",
+        "**Rozpoczęcie sesji** (one-shot kwalifikacje / wyścig) **bez zgody hosta**: 8 PK": "**Starting a session** (one-shot qualifying / race) **without the host's consent**: 8 PP",
+        "**Powtarzające się przekraczanie limitów toru**, jeśli gra nie naliczyła kary: 3–5s oraz 1–3 PK (zależnie od skali przewinienia)": "**Repeatedly exceeding track limits**, if the game did not apply a penalty: 3–5s and 1–3 PP (depending on the severity of the violation)",
+        "**Ścięcie zakrętu** i uzyskanie dzięki temu przewagi: 5–10s oraz 1–3 PK (obowiązek oddania pozycji, jeśli sędziowie tak zdecydują)": "**Cutting a corner** and gaining an advantage from it: 5–10s and 1–3 PP (the position must be given back if the stewards so decide)",
+        "**Wyprzedzanie podczas SC/VSC** w sytuacji, gdy jest zabronione: 5–10s oraz 2–5 PK (w poważnych przypadkach możliwa DSQ)": "**Overtaking under SC/VSC** when it is not allowed: 5–10s and 2–5 PP (DSQ possible in serious cases)",
+        "**Nierespektowanie żółtych flag** i brak odpowiedniego zwolnienia: 5–10s oraz 2–5 PK (zależnie od zagrożenia)": "**Ignoring yellow flags** and failing to slow down sufficiently: 5–10s and 2–5 PP (depending on the level of danger)",
+        "**Ignorowanie niebieskich flag** i utrudnianie bezpiecznego dublowania: 3–5s oraz 1–3 PK (przy powtarzaniu przewinienia kara może wzrosnąć)": "**Ignoring blue flags** and hindering safe lapping: 3–5s and 1–3 PP (the penalty may increase for repeat offenses)",
+        "**Zmiana toru jazdy podczas hamowania**, powodująca zagrożenie lub kolizję: 5–10s oraz 2–5 PK (przy poważnym incydencie możliwa dodatkowa kara)": "**Changing line under braking**, causing danger or a collision: 5–10s and 2–5 PP (an additional penalty is possible for a serious incident)",
+        "**Wielokrotna zmiana kierunku jazdy** w celu obrony pozycji: 3–10s oraz 1–4 PK (zależnie od stopnia zagrożenia)": "**Repeatedly changing direction** to defend a position: 3–10s and 1–4 PP (depending on the level of danger)",
+        "**Niebezpieczny wyjazd z alei serwisowej** i zajechanie drogi innemu kierowcy: 5–10s oraz 2–5 PK (możliwa dodatkowa kara za spowodowanie kolizji)": "**Unsafe pit lane exit** and cutting across another driver: 5–10s and 2–5 PP (an additional penalty for causing a collision is possible)",
+        "**Przekroczenie dozwolonej prędkości w alei serwisowej**, jeśli nie ukarała za to gra: 3–5s oraz 1–3 PK (zależnie od skali przekroczenia)": "**Exceeding the pit lane speed limit**, if the game did not penalize it: 3–5s and 1–3 PP (depending on how far the limit was exceeded)",
+        "**Nieoddanie pozycji** po uzyskaniu jej w sposób niezgodny z regulaminem: 5s oraz 1–3 PK (kara może zostać zwiększona przy uzyskaniu większej przewagi)": "**Failing to give back a position** gained in breach of the rules: 5s and 1–3 PP (the penalty may be increased if a larger advantage was gained)",
+        "**Niebezpieczne zachowanie podczas restartu po SC**, powodujące zagrożenie dla innych kierowców: 3–10s oraz 1–4 PK (zależnie od skutków incydentu)": "**Dangerous behavior during an SC restart**, endangering other drivers: 3–10s and 1–4 PP (depending on the consequences of the incident)",
+        "**Celowe utrudnianie wyścigu** innemu kierowcy bez uzasadnienia sportowego: 5–15s oraz 2–6 PK (w poważnych przypadkach możliwa DSQ)": "**Deliberately obstructing** another driver's race without sporting justification: 5–15s and 2–6 PP (DSQ possible in serious cases)",
+        "**Celowe unikanie odpowiedzialności za przewinienie**, np. opuszczenie sesji w celu uniknięcia kary: 3–6 PK (możliwa dodatkowa kara od sędziów)": "**Deliberately evading responsibility for an offense**, e.g. leaving the session to avoid a penalty: 3–6 PP (the stewards may impose an additional penalty)",
+        "Kary przyznane przez grę F1 25 **nie podlegają protestowi**, chyba że zostały nałożone w wyniku błędu gry lub w sytuacji walki o pozycję, gdy opuszczenie toru było najrozsądniejszą decyzją w celu uniknięcia kolizji (wymagany materiał wideo jako dowód).": "Penalties given by the F1 25 game **cannot be appealed**, unless they were imposed due to a game error or in a battle for position where leaving the track was the most reasonable choice to avoid a collision (video evidence is required).",
+        "Każdy przypadek rozpatrywany jest **indywidualnie**.": "Every case is reviewed **individually**.",
+        "**Do 25% długości wyścigu:** sesja zostaje wznowiona, pola startowe według kwalifikacji, wyścig 50%": "**Up to 25% of race distance:** the session is restarted, grid set by qualifying, race distance 50%",
+        "**25–50% długości wyścigu:** sesja zostaje wznowiona, pola startowe według miejsc sprzed błędu gry, wyścig 35%": "**25–50% of race distance:** the session is restarted, grid set by positions before the game error, race distance 35%",
+        "**50–75% długości wyścigu:** sesja zostaje wznowiona, pola startowe według miejsc sprzed błędu gry, wyścig 25%": "**50–75% of race distance:** the session is restarted, grid set by positions before the game error, race distance 25%",
+        "**Powyżej 75% długości wyścigu:** sesja zostaje zakończona, wyniki wyścigu według miejsc na ostatnim okrążeniu przed błędem gry.": "**Above 75% of race distance:** the session ends, race results based on positions on the last lap before the game error.",
+        "Niestawienie się na wyścig przez **kierowcę podstawowego**, który potwierdził udział, skutkuje karą 3 PK.": "Failure to appear for a race by a **primary driver** who confirmed participation results in a 3 PP penalty.",
+        "W przypadku powtórzenia sytuacji możliwa jest **degradacja do roli rezerwowego** lub **usunięcie z ligi**.": "If this happens again, the driver may face **demotion to reserve driver** or **removal from the league**.",
+        "Niestawienie się na wyścig przez **kierowcę rezerwowego**, który potwierdził udział, skutkuje **czasowym odsunięciem od startów**.": "Failure to appear for a race by a **reserve driver** who confirmed participation results in a **temporary suspension from races**.",
+        "Nieobecność na **trzech kolejnych wydarzeniach** lub **czterech łącznie** może skutkować degradacją do roli kierowcy rezerwowego lub **całkowitym usunięciem z ligi**.": "Absence from **three consecutive events** or **four in total** may result in demotion to reserve driver or **complete removal from the league**.",
+        "Osoba przygotowująca się do okrążenia pomiarowego ma obowiązek zachować **odpowiedni odstęp** od innych zawodników, aby umożliwić sobie prawidłowe wykonanie przejazdu.": "A driver preparing for a flying lap must keep an **adequate gap** from other competitors to be able to complete the lap properly.",
+        "Zabrania się **skracania trasy** w celu szybszego rozpoczęcia okrążenia pomiarowego, wcześniejszego zjazdu do alei serwisowej lub uzyskania dodatkowej prędkości przed rozpoczęciem okrążenia pomiarowego.": "**Cutting the track** is forbidden in order to start a flying lap sooner, enter the pit lane earlier, or gain extra speed before starting a flying lap.",
+        "Zakazane jest celowe **uszkadzanie tabliczek** na dojazdach do zakrętów.": "Deliberately **damaging the boards** on the approach to corners is forbidden.",
+        "Kierowca znajdujący się poza okrążeniem pomiarowym ma obowiązek **ustąpić pierwszeństwa** zawodnikowi będącemu na okrążeniu pomiarowym.": "A driver who is not on a flying lap must **give way** to a driver who is on a flying lap.",
+        "W przypadku wywieszenia **żółtej flagi** wszyscy uczestnicy muszą zachować szczególną ostrożność.": "When a **yellow flag** is shown, all participants must exercise extra caution.",
+        "Kierowca powracający na tor zobowiązany jest upewnić się, że jego manewr **nie utrudni jazdy** innym zawodnikom.": "A driver returning to the track must make sure their maneuver **does not hinder** other competitors.",
+        "Wycofanie się z kwalifikacji możliwe jest wyłącznie poprzez opcję **„Opuść sesję\"** w menu gry i tylko z alei serwisowej.": "Withdrawing from qualifying is only possible via the **“Leave Session”** option in the game menu, and only from the pit lane.",
+        "Jeżeli na torze pozostaje ostatni uczestnik, a pozostali nie mogą już rozpocząć okrążenia pomiarowego, dopuszcza się **wycofanie w bezpiecznym miejscu** poza aleją serwisową.": "If only the last participant remains on track and the others can no longer start a flying lap, **withdrawing at a safe location** outside the pit lane is permitted.",
+        "Zabrania się **jazdy na bocie** podczas kwalifikacji, chyba że sytuacja na torze wymaga innych działań. Ograniczenie to w szczególności dotyczy okrążenia pomiarowego.": "**Driving on AI assist** during qualifying is forbidden, unless the situation on track requires otherwise. This restriction applies in particular to the flying lap.",
+        "**Kategoryczny zakaz wyprzedzania** podczas okrążenia formującego.": "**Overtaking is strictly forbidden** during the formation lap.",
+        "Zawodnicy muszą dostosować **rodzaj opon** do aktualnych warunków torowych, z wyjątkiem sytuacji zmiennej pogody.": "Competitors must match the **tyre type** to current track conditions, except in changeable weather.",
+        "Pojazd uszkodzony w sposób uniemożliwiający bezpieczną jazdę musi niezwłocznie **zjechać do alei serwisowej** w celu naprawy.": "A car damaged to the point of being unsafe to drive must immediately **enter the pit lane** for repairs.",
+        "Kierowcy ponoszą **pełną odpowiedzialność** za swoje manewry. Podczas wyprzedzania zarówno kierowca atakujący, jak i broniący się odpowiadają za bezpieczny przebieg manewru.": "Drivers bear **full responsibility** for their maneuvers. When overtaking, both the attacking and the defending driver are responsible for the maneuver being carried out safely.",
+        "Zmiana lub korekta linii jazdy w **strefie dohamowania** przed zakrętem": "Changing or adjusting the racing line in the **braking zone** before a corner",
+        "Wypychanie przeciwników **poza tor**": "Forcing opponents **off the track**",
+        "Wyprzedzanie **poza torem**": "Overtaking **off the track**",
+        "Gwałtowne, nieuzasadnione **hamowanie**": "Sudden, unjustified **braking**",
+        "Wielokrotna zmiana linii jazdy (tzw. **waving**)": "Repeatedly changing the racing line (so-called **weaving**)",
+        "Niereagowanie na obowiązek **pozostawienia miejsca** rywalowi": "Failing to comply with the obligation to **leave space** for a rival",
+        "Wykonywanie manewru wyprzedzania z mniej niż **dwoma kołami** w granicach toru": "Overtaking with fewer than **two wheels** within track limits",
+        "Kierowca, który opuści tor, musi jak najszybciej i bezpiecznie na niego powrócić, **nie utrudniając jazdy** innym zawodnikom.": "A driver who leaves the track must return to it as quickly and safely as possible, **without hindering** other competitors.",
+        "Zawodnik, który zyskał pozycję wskutek opuszczenia toru, ma obowiązek **oddać ją** przy najbliższej bezpiecznej okazji.": "A competitor who gains a position by leaving the track must **give it back** at the next safe opportunity.",
+        "**Zabrania się:**\n– celowego rozbijania pojazdu,\n– ścinania tabliczek przed zakrętami,\n– jazdy w przeciwnym kierunku,\n– korzystania z opcji „Powrót na tor\",\n– używania „Opuść sesję\" lub „Wyjdź z gry\" podczas przebywania na torze,\n– jazdy na bocie podczas startu i wyścigu,\n– zatrzymywania pojazdu na torze bez uzasadnionej przyczyny,\n– **samosądu** podczas zawodów.": "**It is forbidden to:**\n– deliberately crash the car,\n– cut the boards before corners,\n– drive in the wrong direction,\n– use the “Return to Track” option,\n– use “Leave Session” or “Quit Game” while on track,\n– drive on AI assist during the start and the race,\n– stop the car on track without a valid reason,\n– take **vigilante justice** during the event.",
+        "Zarząd Ligi zastrzega sobie prawo do **wprowadzania zmian w regulaminie** w trakcie sezonu. O wszelkich zmianach uczestnicy zostaną poinformowani na **Discordzie Ligi**.": "The League Board reserves the right to **make changes to these rules** during the season. Participants will be informed of any changes on the **League Discord**.",
+        "W sytuacjach nieuregulowanych niniejszym regulaminem **Zarząd podejmuje decyzję według własnego uznania**, adekwatnie do okoliczności.": "In situations not covered by these rules, **the Board decides at its own discretion**, as appropriate to the circumstances."
     };
 
     let currentLang = 'pl';
@@ -2616,10 +2999,10 @@
         const src = el.dataset.src;
         if (lang === 'pl') { el.innerHTML = fmt(src, 'pl'); return; }
         const key = src.trim();
-        const known = DICT_HTML[key] || DICT[key];
+        const known = DICT_SRC[key] || DICT_HTML[key] || DICT[key];
         if (known) { el.innerHTML = fmt(known, 'en'); return; }
         el.innerHTML = fmt(src, 'pl'); // na razie po polsku, dotłumacz w tle
-        getTranslation(key).then(en => {
+        getTranslation(key.replace(/\*\*/g, '')).then(en => {   // tłumacz bez znaczników pogrubienia
             if (currentLang === 'en' && el.dataset.src === src) {
                 withObserverPaused(() => { el.innerHTML = fmt(en, 'en'); });
             }
