@@ -1252,42 +1252,28 @@
         }
     }
 
-    // ── LOGOWANIE: login + hasło (bez e-maila) ──
-    // Hasło nie jest zapisane w kodzie jawnie — tylko jego skrót SHA-256.
-    // Firebase pod spodem i tak potrzebuje konta, więc strona sama używa
-    // technicznego adresu ADMIN_EMAIL i przy pierwszym logowaniu sama
-    // zakłada to konto (nic nie trzeba robić w konsoli Firebase).
-    const ADMIN_LOGIN     = 'admin';
-    const ADMIN_PASS_HASH = 'cb3c76e02ca40df5a37cfec6589787f53adee038f1908da0e2d13dd2153baaf3';
-    const ADMIN_EMAIL     = 'admin@regklw.firebaseapp.com';
-
-    async function sha256Hex(text) {
-        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-    }
+    // ── LOGOWANIE: login + hasło, weryfikowane przez Firebase ──
+    // Firebase Authentication rozpoznaje konta po adresie, więc login
+    // zamieniany jest na <login>@LOGIN_DOMAIN (np. admin -> admin@regklw.firebaseapp.com).
+    // Hasło sprawdza wyłącznie Firebase — nie ma go nigdzie w kodzie strony.
+    const LOGIN_DOMAIN = 'regklw.firebaseapp.com';
 
     async function submitLogin() {
         const login = document.getElementById('loginUsername').value.trim().toLowerCase();
         const pass  = document.getElementById('loginPassword').value;
         if (!login || !pass) { alert("Podaj login i hasło."); return; }
         try {
-            if (login !== ADMIN_LOGIN || (await sha256Hex(pass)) !== ADMIN_PASS_HASH) {
-                alert("Błąd logowania: zły login lub hasło.");
-                return;
-            }
-            try {
-                await auth.signInWithEmailAndPassword(ADMIN_EMAIL, pass);
-            } catch (err) {
-                const missing = ['auth/user-not-found', 'auth/invalid-credential', 'auth/invalid-login-credentials'];
-                if (!missing.includes(err.code)) throw err;
-                // konto jeszcze nie istnieje — załóż je przy pierwszym logowaniu
-                await auth.createUserWithEmailAndPassword(ADMIN_EMAIL, pass);
-            }
+            await auth.signInWithEmailAndPassword(`${login}@${LOGIN_DOMAIN}`, pass);
             document.getElementById('loginPassword').value = '';
             closeLoginModal();
             enterAdminVisual();
         } catch (err) {
-            alert("Błąd logowania: zły login lub hasło.");
+            const bad = ['auth/invalid-credential', 'auth/invalid-login-credentials',
+                         'auth/user-not-found', 'auth/wrong-password', 'auth/invalid-email'];
+            if (bad.includes(err.code))                       alert("Błąd logowania: zły login lub hasło.");
+            else if (err.code === 'auth/too-many-requests')   alert("Za dużo nieudanych prób. Spróbuj ponownie za kilka minut.");
+            else if (err.code === 'auth/network-request-failed') alert("Brak połączenia z Firebase. Sprawdź internet.");
+            else                                              alert("Błąd logowania (" + err.code + ").");
         }
     }
     function closeLoginModal() { document.getElementById('loginModal').style.display = 'none'; }
