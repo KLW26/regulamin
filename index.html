@@ -711,6 +711,70 @@
         }
         .btn-lang:hover { background: rgba(32,128,255,0.12); }
         .admin-mode #langToggleBtn { display: none !important; }
+
+        /* ── DISCORD PANEL (admin only) ── */
+        .discord-panel {
+            display: none;
+            margin-top: 14px;
+            background: var(--bg-card);
+            border-radius: 6px;
+            border: 1px solid rgba(88,101,242,0.35);
+            padding: 18px 22px;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .admin-mode .discord-panel { display: flex; }
+        .dc-row { display: flex; gap: 8px; align-items: center; }
+        .dc-row .edit-input { flex: 1; min-width: 0; }
+        .dc-mini-btn {
+            flex-shrink: 0; background: rgba(255,255,255,0.05); color: var(--col-text);
+            border: 1px solid rgba(255,255,255,0.12); border-radius: 3px;
+            padding: 6px 10px; cursor: pointer; font-size: 0.9rem; transition: 0.15s;
+        }
+        .dc-mini-btn:hover { background: rgba(255,255,255,0.1); }
+        .dc-checks { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+        .dc-checks label {
+            display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+            font-size: 0.92rem; font-weight: 600; color: var(--col-text);
+        }
+        .dc-checks input { accent-color: #5865f2; width: 15px; height: 15px; cursor: pointer; }
+        .dc-checks .dc-auto { flex-basis: 100%; color: var(--col-muted); }
+        .dc-btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+        .dc-btn-row button {
+            font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.85rem;
+            letter-spacing: 2px; text-transform: uppercase; border-radius: 4px;
+            padding: 9px 18px; cursor: pointer; transition: 0.2s; white-space: nowrap;
+        }
+        .dc-btn-row button:disabled { opacity: 0.45; cursor: wait; }
+        .dc-send-btn  { background: #5865f2; color: #fff; border: 1px solid #5865f2; box-shadow: 0 0 18px rgba(88,101,242,0.35); }
+        .dc-send-btn:hover:not(:disabled)  { background: #4752c4; }
+        .dc-fresh-btn { background: rgba(88,101,242,0.1); color: #a3abff; border: 1px solid rgba(88,101,242,0.35); }
+        .dc-fresh-btn:hover:not(:disabled) { background: rgba(88,101,242,0.2); }
+        .dc-del-btn   { background: rgba(224,32,48,0.1); color: var(--col-red); border: 1px solid rgba(224,32,48,0.25); }
+        .dc-del-btn:hover:not(:disabled)   { background: rgba(224,32,48,0.2); }
+        .dc-status { font-size: 0.88rem; font-weight: 600; color: var(--col-muted); letter-spacing: 0.3px; }
+        .dc-status.ok   { color: #2ecc71; }
+        .dc-status.err  { color: var(--col-red); }
+        .dc-status.busy { color: #a3abff; }
+        .dc-help { font-size: 0.86rem; color: var(--col-muted); line-height: 1.5; }
+        .dc-help summary {
+            cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-weight: 700;
+            letter-spacing: 2px; text-transform: uppercase; font-size: 0.75rem; color: var(--col-muted);
+        }
+        .dc-help ol { margin: 8px 0 6px 20px; }
+        .dc-help li { margin-bottom: 4px; }
+        .dc-help b { color: var(--col-text); }
+
+        .dc-toast {
+            position: fixed; right: 20px; bottom: 20px; z-index: 10000; max-width: min(420px, calc(100vw - 32px));
+            background: var(--bg-card); color: var(--col-text); border: 1px solid rgba(88,101,242,0.45);
+            border-left: 3px solid #5865f2; border-radius: 6px; padding: 12px 16px;
+            font-weight: 600; font-size: 0.92rem; box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+            opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity 0.25s, transform 0.25s;
+        }
+        .dc-toast.show { opacity: 1; transform: translateY(0); }
+        .dc-toast.ok   { border-left-color: #2ecc71; }
+        .dc-toast.err  { border-left-color: var(--col-red); }
     </style>
 </head>
 <body>
@@ -775,6 +839,38 @@
             <span class="bg-slider-val" id="bgOpacityVal">50%</span>
         </div>
     </div>
+
+    <!-- DISCORD PANEL (visible only in admin mode) -->
+    <div class="discord-panel" id="discordPanel">
+        <div class="bg-panel-title">Discord — publikacja regulaminu</div>
+        <div class="dc-row">
+            <input type="password" id="dcWebhook" class="edit-input" placeholder="Link webhooka: https://discord.com/api/webhooks/…" autocomplete="off" spellcheck="false">
+            <button type="button" class="dc-mini-btn" onclick="dcToggleWebhookVisibility()" title="Pokaż / ukryj link">👁</button>
+        </div>
+        <div class="dc-checks">
+            <label><input type="checkbox" id="dcSecReg"> Pełny regulamin (zakładki)</label>
+            <label><input type="checkbox" id="dcSecLimits"> System punktów karnych</label>
+            <label><input type="checkbox" id="dcSecCats"> Kategorie naruszeń (karty)</label>
+            <label class="dc-auto"><input type="checkbox" id="dcAuto"> Po kliknięciu „Zapisz zmiany” automatycznie aktualizuj regulamin na Discordzie</label>
+        </div>
+        <div class="dc-btn-row">
+            <button type="button" class="dc-send-btn" onclick="discordSendClick(false)">📤 Wyślij / zaktualizuj</button>
+            <button type="button" class="dc-fresh-btn" onclick="discordSendClick(true)">♻ Wyślij od nowa</button>
+            <button type="button" class="dc-del-btn" onclick="discordDeleteClick()">✕ Usuń z Discorda</button>
+        </div>
+        <div class="dc-status" id="dcStatus">Wczytywanie ustawień…</div>
+        <details class="dc-help">
+            <summary>Jak to działa / skąd wziąć link?</summary>
+            <ol>
+                <li>Na Discordzie: kanał z regulaminem → ⚙ <b>Edytuj kanał</b> → <b>Integracje</b> → <b>Webhooki</b> → <b>Nowy webhook</b>.</li>
+                <li>Nadaj mu nazwę i awatar (tak będzie podpisany regulamin), kliknij <b>Kopiuj adres URL webhooka</b> i wklej powyżej.</li>
+                <li><b>Wyślij / zaktualizuj</b> — przy pierwszym razie publikuje regulamin, a później edytuje te same wiadomości, więc kanał nie zapełnia się kopiami. Wysyłana jest treść z edytora, także niezapisane zmiany.</li>
+                <li><b>Wyślij od nowa</b> — usuwa poprzednie wiadomości i publikuje regulamin ponownie na dole kanału.</li>
+            </ol>
+            <p>Link webhooka działa jak hasło do kanału — nie wklejaj go nigdzie publicznie.</p>
+        </details>
+    </div>
+    <div class="dc-toast" id="dcToast"></div>
 
     <!-- LOGIN MODAL -->
     <div class="login-modal" id="loginModal">
@@ -1454,11 +1550,9 @@
     }
 
     // ── SAVE ──
-    async function saveAndExitAdmin() {
-        const btn = document.getElementById('adminBtn');
-        btn.innerText = "Zapisywanie…";
-        btn.disabled  = true;
-
+    // Zbiera całą treść z edytora (tryb admina) w obiekt zapisywany do Firebase.
+    // Ten sam obiekt służy do publikacji regulaminu na Discordzie.
+    function collectAdminPayload() {
         const payload = {
             bg: {
                 image:   bgBase64,
@@ -1529,6 +1623,15 @@
         });
         payload.regPanels = regPanels;
         payload.extra2335 = true; // nr 23–35 są już w zapisanym regulaminie
+        return payload;
+    }
+
+    async function saveAndExitAdmin() {
+        const btn = document.getElementById('adminBtn');
+        btn.innerText = "Zapisywanie…";
+        btn.disabled  = true;
+
+        const payload = collectAdminPayload();
 
         try {
             await db.ref('taryfikator').set(payload);
@@ -1538,6 +1641,8 @@
             isAdminMode = false;
             btn.innerText = "Panel Admina";
             btn.classList.remove('active');
+            // automatyczna aktualizacja regulaminu na Discordzie (jeśli włączona)
+            if (typeof onRegulaminSaved === 'function') onRegulaminSaved(payload);
         } catch (err) {
             alert("Błąd zapisu: " + err.message);
             btn.innerText = "Zapisz zmiany";
@@ -1706,6 +1811,456 @@
             ]
         });
     }
+</script>
+
+<!-- ════════════════════════════════════════════════════════════════
+     DISCORD — publikacja regulaminu przez webhook kanału.
+     Panel widoczny tylko w trybie admina. Link webhooka i ID wysłanych
+     wiadomości zapisywane są w Firebase pod ścieżką `discordConfig`
+     (reguły bazy powinny pozwalać czytać ją tylko zalogowanym).
+     Gdy baza nie da dostępu do tej ścieżki, ustawienia trafiają do
+     pamięci tej przeglądarki (localStorage).
+     ════════════════════════════════════════════════════════════════ -->
+<script>
+    const DISCORD_DB_PATH   = 'discordConfig';
+    const DISCORD_LOCAL_KEY = 'klw_discord_cfg';
+    const DC_MAX_DESC       = 4000;  // limit Discorda: 4096 znaków opisu
+    const DC_MAX_LINE       = 3800;
+    const DC_MAX_MSG_CHARS  = 5800;  // limit Discorda: 6000 znaków na wiadomość
+    const DC_MAX_EMBEDS     = 10;    // limit Discorda: 10 bloków na wiadomość
+    const DC_DELAY          = 400;   // odstęp między zapytaniami (limity webhooka)
+    const DC_TAB_COLORS     = [0xe02030, 0xf07020, 0xf0c030, 0x2080ff, 0x2ecc71, 0xa040e0];
+
+    function dcDefaultCfg() {
+        return {
+            webhook: '', autoSync: false,
+            sections: { reg: true, limits: true, cats: false },
+            messageIds: [], messagesWebhook: '', lastSync: null
+        };
+    }
+    let discordCfg    = dcDefaultCfg();
+    let discordStore  = 'firebase';   // 'firebase' | 'local'
+    let discordLoaded = false;
+    let discordBusy   = false;
+
+    // ── USTAWIENIA ──
+    async function loadDiscordConfig() {
+        let data = null;
+        try {
+            const snap = await db.ref(DISCORD_DB_PATH).once('value');
+            data = snap.val();
+            discordStore = 'firebase';
+        } catch (e) {
+            discordStore = 'local';
+        }
+        if (!data) {
+            try { data = JSON.parse(localStorage.getItem(DISCORD_LOCAL_KEY) || 'null'); } catch (_) {}
+        }
+        const def = dcDefaultCfg();
+        discordCfg = Object.assign(def, data || {});
+        discordCfg.sections = Object.assign(dcDefaultCfg().sections, (data && data.sections) || {});
+        const ids = discordCfg.messageIds;
+        discordCfg.messageIds = Array.isArray(ids) ? ids.filter(Boolean) : (ids ? Object.values(ids) : []);
+        discordCfg.webhook = String(discordCfg.webhook || '');
+        discordLoaded = true;
+        renderDiscordPanel();
+    }
+
+    async function saveDiscordConfig() {
+        if (!discordLoaded) return;   // nie nadpisuj zapisanych ustawień, zanim się wczytają
+        const data = JSON.parse(JSON.stringify(discordCfg));
+        if (discordStore === 'firebase') {
+            try { await db.ref(DISCORD_DB_PATH).set(data); renderDiscordPanel(); return; }
+            catch (e) { discordStore = 'local'; }
+        }
+        try { localStorage.setItem(DISCORD_LOCAL_KEY, JSON.stringify(data)); } catch (_) {}
+        renderDiscordPanel();
+    }
+
+    // ── WEBHOOK ──
+    const DC_WEBHOOK_RE = /^https:\/\/(?:(?:ptb|canary)\.)?discord(?:app)?\.com\/api\/(?:v\d+\/)?webhooks\/(\d+)\/([\w-]+)/i;
+    function dcParseWebhook(url) {
+        const s = String(url || '').trim();
+        const m = s.match(DC_WEBHOOK_RE);
+        if (!m) return null;
+        const t = s.match(/[?&]thread_id=(\d+)/);
+        return {
+            base:   `https://discord.com/api/webhooks/${m[1]}/${m[2]}`,
+            thread: t ? t[1] : null,
+            key:    m[1] + (t ? ':' + t[1] : '')
+        };
+    }
+    function dcUrl(hook, path, params) {
+        const q = new URLSearchParams(params || {});
+        if (hook.thread) q.set('thread_id', hook.thread);
+        const qs = q.toString();
+        return hook.base + (path || '') + (qs ? '?' + qs : '');
+    }
+
+    // ── FORMATOWANIE (Markdown Discorda) ──
+    function dcEsc(s)        { return String(s || '').replace(/([\\*_~`|])/g, '\\$1'); }
+    function dcTrunc(s, max) { s = String(s || ''); return s.length > max ? s.slice(0, max - 1) + '…' : s; }
+
+    // kary czasowe, PK i DSQ jako `wyróżnione` fragmenty — odpowiednik chipów ze strony
+    function dcChips(s) {
+        const rng  = '(\\d+(?:\\s*[–-]\\s*\\d+)?)';
+        const norm = n => n.replace(/\s*[–-]\s*/, '–');
+        return String(s || '')
+            .replace(new RegExp(rng + '\\s*(?:sekund[a-z]*|sek\\.?|s)(?![' + PL_LETTERS + '])', 'g'), (m, n) => '`' + norm(n) + ' s`')
+            .replace(new RegExp(rng + '\\s*PK(?![' + PL_LETTERS + '])', 'g'), (m, n) => '`' + norm(n) + ' PK`')
+            .replace(/\bDSQ\b/g, '`DSQ`');
+    }
+
+    // „Tytuł: kara 5–20s oraz 3–5 PK” → „**Tytuł** — `5–20 s` oraz `3–5 PK`”
+    function dcEntry(text) {
+        const t  = String(text || '').trim();
+        const ci = t.indexOf(':');
+        if (ci > 0 && ci <= 120 && t[ci + 1] !== '/' && !t.slice(0, ci).includes('\n')) {
+            const title = dcEsc(t.slice(0, ci).trim());
+            const rest  = dcChips(dcEsc(t.slice(ci + 1).trim())).replace(/^kara\s+(?=`)/i, '');
+            return rest.startsWith('`') ? `**${title}** — ${rest}` : `**${title}:** ${rest}`;
+        }
+        return dcChips(dcEsc(t));
+    }
+
+    // Dzieli długą sekcję na kilka bloków (embedów) — nagłówek nigdy nie zostaje sam na końcu bloku.
+    function dcChunkEmbeds(title, lines, color) {
+        const embeds = [];
+        const make = (arr) => ({
+            title: dcTrunc(embeds.length ? `${title} (cd.)` : title, 256),
+            description: arr.map(l => l.text).join('\n').trim(),
+            color
+        });
+        let cur = [], len = 0;
+        lines.forEach(l => {
+            const text = dcTrunc(l.text, DC_MAX_LINE);
+            if (cur.length && len + text.length + 1 > DC_MAX_DESC) {
+                const carry = [];
+                while (cur.length && cur[cur.length - 1].head) carry.unshift(cur.pop());
+                if (cur.length) embeds.push(make(cur));
+                cur = carry;
+                len = cur.reduce((a, x) => a + x.text.length + 1, 0);
+            }
+            cur.push({ text, head: !!l.head });
+            len += text.length + 1;
+        });
+        if (cur.length) embeds.push(make(cur));
+        return embeds;
+    }
+
+    function buildDiscordEmbeds(p, sections) {
+        const embeds = [];
+        const h = p.header || {};
+        const leagueName = String(h.title || '').split('\n').map(s => s.trim()).filter(Boolean).join(' ') || 'Regulamin ligi';
+        const pageUrl = /^https?:$/.test(location.protocol) ? location.origin + location.pathname : '';
+
+        // nagłówek
+        const intro = [];
+        if (h.subtitle) intro.push(`**${dcEsc(h.subtitle)}**`);
+        if (h.badge)    intro.push(dcEsc(h.badge));
+        if (pageUrl)    intro.push(`\n🔗 [Pełna wersja online](${pageUrl})`);
+        const head = { title: dcTrunc('🏁 ' + leagueName, 256), color: 0x2080ff };
+        if (intro.length) head.description = intro.join('\n');
+        if (pageUrl) head.url = pageUrl;
+        embeds.push(head);
+
+        // kategorie naruszeń (karty)
+        if (sections.cats) {
+            (p.categories || []).forEach(cat => {
+                const lines = (cat.rules || [])
+                    .filter(r => String(r.title || '').trim())
+                    .map(r => ({ text: '• **' + dcEsc(r.title.trim()) + '**' + (String(r.penalty || '').trim() ? ' — ' + dcChips(dcEsc(r.penalty.trim())) : '') }));
+                if (!lines.length) return;
+                const color = parseInt((COLOR_HEX[cat.categoryClass] || '#2080ff').slice(1), 16);
+                embeds.push(...dcChunkEmbeds(`${cat.icon || '⚠️'} ${cat.headerText || ''}`.trim(), lines, color));
+            });
+        }
+
+        // pełny regulamin — każda zakładka jako osobny blok
+        if (sections.reg) {
+            (p.regPanels || []).forEach((rp, i) => {
+                const lines = [];
+                (rp.items || []).forEach(it => {
+                    const t = String(it.text || '').trim();
+                    if (!t) return;
+                    if (it.type === 'h3') lines.push({ text: '\n**__' + dcTrunc(dcEsc(t), 200) + '__**', head: true });
+                    else                  lines.push({ text: '• ' + dcEntry(t) });
+                });
+                if (!lines.length) return;
+                embeds.push(...dcChunkEmbeds(`${rp.icon || '📋'} ${rp.label || 'Regulamin'}`.trim(), lines, DC_TAB_COLORS[i % DC_TAB_COLORS.length]));
+            });
+        }
+
+        // system punktów karnych
+        const limits = (p.limits || []).filter(l => String(l.pkText || '').trim());
+        if (sections.limits && limits.length) {
+            embeds.push({
+                title: dcTrunc('🚦 ' + (p.footerTitle || 'System Punktów Karnych'), 256),
+                color: 0xa040e0,
+                fields: limits.slice(0, 25).map(l => ({
+                    name:   dcTrunc(dcEsc(l.pkText.trim()), 256),
+                    value:  dcTrunc(dcEsc(String(l.descText || '').trim()) || '​', 1024),
+                    inline: true
+                }))
+            });
+        }
+
+        const last = embeds[embeds.length - 1];
+        last.footer    = { text: dcTrunc(leagueName + ' • ostatnia aktualizacja', 2048) };
+        last.timestamp = new Date().toISOString();
+        return embeds;
+    }
+
+    function dcEmbedSize(e) {
+        return (e.title || '').length + (e.description || '').length + (e.footer ? e.footer.text.length : 0)
+             + (e.fields || []).reduce((a, f) => a + f.name.length + f.value.length, 0);
+    }
+
+    // Pakuje bloki w wiadomości: max 10 bloków i ~6000 znaków na wiadomość.
+    function buildDiscordMessages(payload, sections) {
+        const msgs = [];
+        let cur = [], size = 0;
+        buildDiscordEmbeds(payload, sections).forEach(e => {
+            const s = dcEmbedSize(e);
+            if (cur.length && (cur.length >= DC_MAX_EMBEDS || size + s > DC_MAX_MSG_CHARS)) {
+                msgs.push({ embeds: cur });
+                cur = []; size = 0;
+            }
+            cur.push(e); size += s;
+        });
+        if (cur.length) msgs.push({ embeds: cur });
+        // allowed_mentions: żadnych pingów (@everyone itp.) z treści regulaminu
+        return msgs.map(m => Object.assign(m, { allowed_mentions: { parse: [] } }));
+    }
+
+    // ── ZAPYTANIA DO DISCORDA ──
+    const dcSleep = ms => new Promise(r => setTimeout(r, ms));
+
+    async function dcRequest(method, url, body) {
+        for (let attempt = 0; attempt < 6; attempt++) {
+            let res;
+            try {
+                res = await fetch(url, {
+                    method,
+                    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+                    body:    body ? JSON.stringify(body) : undefined
+                });
+            } catch (e) {
+                throw new Error('brak połączenia z Discordem (sprawdź internet lub wyłącz blokowanie skryptów dla tej strony).');
+            }
+            if (res.status !== 429) return res;
+            let wait = 1;
+            try { wait = (await res.json()).retry_after || 1; } catch (_) {}
+            await dcSleep(Math.min(wait, 30) * 1000 + 300);
+        }
+        throw new Error('Discord chwilowo ogranicza liczbę wiadomości — spróbuj ponownie za minutę.');
+    }
+
+    async function dcError(res, action) {
+        let msg = '', raw = '';
+        try { const j = await res.json(); msg = j.message || ''; raw = JSON.stringify(j); } catch (_) {}
+        if (res.status === 401 || (res.status === 404 && action === 'post'))
+            return new Error('ten webhook nie istnieje albo link jest niepełny — skopiuj go ponownie z Discorda.');
+        if (/thread_name|thread_id/i.test(raw))
+            return new Error('to kanał typu forum — dopisz na końcu linku ?thread_id=ID_WĄTKU (ID wątku z regulaminem).');
+        return new Error(`Discord odrzucił wiadomość (${res.status}${msg ? ': ' + msg : ''}).`);
+    }
+
+    async function dcDeleteMessages(hook, ids) {
+        for (const id of ids) {
+            try { await dcRequest('DELETE', dcUrl(hook, '/messages/' + id)); } catch (_) {}
+            await dcSleep(DC_DELAY);
+        }
+    }
+
+    // Publikuje regulamin. Domyślnie edytuje wcześniej wysłane wiadomości (kanał się nie zaśmieca);
+    // fresh = true → usuwa stare i wysyła wszystko od nowa na dół kanału.
+    async function syncDiscord(payload, opts = {}) {
+        const hook = dcParseWebhook(discordCfg.webhook);
+        if (!hook) throw new Error('najpierw wklej poprawny link webhooka.');
+        const messages = buildDiscordMessages(payload, discordCfg.sections);
+        const progress = opts.onProgress || (() => {});
+        let oldIds = (discordCfg.messagesWebhook === hook.key) ? discordCfg.messageIds.slice() : [];
+        let fresh  = !!opts.fresh;
+        const newIds = [];
+        let posting = false;
+
+        try {
+            if (!fresh) {
+                for (let i = 0; i < messages.length && i < oldIds.length; i++) {
+                    progress(i + 1, messages.length);
+                    const res = await dcRequest('PATCH', dcUrl(hook, '/messages/' + oldIds[i]), messages[i]);
+                    // ktoś usunął wiadomość ręcznie → wysyłamy całość od nowa, żeby zachować kolejność
+                    if (res.status === 404) { fresh = true; break; }
+                    if (!res.ok) throw await dcError(res, 'edit');
+                    newIds.push(oldIds[i]);
+                    await dcSleep(DC_DELAY);
+                }
+            }
+            if (fresh) {
+                await dcDeleteMessages(hook, oldIds);
+                oldIds = [];
+                newIds.length = 0;
+            }
+
+            posting = true;
+            for (let i = newIds.length; i < messages.length; i++) {
+                progress(i + 1, messages.length);
+                const res = await dcRequest('POST', dcUrl(hook, '', { wait: 'true' }), messages[i]);
+                if (!res.ok) throw await dcError(res, 'post');
+                newIds.push((await res.json()).id);
+                await dcSleep(DC_DELAY);
+            }
+
+            // regulamin się skrócił → usuń nadmiarowe stare wiadomości
+            await dcDeleteMessages(hook, oldIds.slice(messages.length));
+        } catch (e) {
+            if (posting) {   // zapamiętaj to, co już jest na kanale, żeby następna próba to edytowała
+                discordCfg.messageIds = newIds.slice();
+                discordCfg.messagesWebhook = hook.key;
+                await saveDiscordConfig();
+            }
+            throw e;
+        }
+
+        discordCfg.messageIds      = newIds;
+        discordCfg.messagesWebhook = hook.key;
+        discordCfg.lastSync        = Date.now();
+        await saveDiscordConfig();
+        return newIds.length;
+    }
+
+    // ── PANEL ──
+    function dcSetStatus(text, kind) {
+        const el = document.getElementById('dcStatus');
+        if (!el) return;
+        el.textContent = text;
+        el.className = 'dc-status' + (kind ? ' ' + kind : '');
+    }
+
+    function dcIdleStatus() {
+        if (!discordLoaded) return ['Wczytywanie ustawień…', ''];
+        let text, kind = '';
+        const hook = dcParseWebhook(discordCfg.webhook);
+        if (!discordCfg.webhook.trim())  text = 'Wklej link webhooka kanału, na który ma trafiać regulamin.';
+        else if (!hook)                  { text = '⚠ To nie wygląda na link webhooka Discorda (https://discord.com/api/webhooks/…).'; kind = 'err'; }
+        else if (discordCfg.messagesWebhook === hook.key && discordCfg.messageIds.length && discordCfg.lastSync)
+            text = `Opublikowano: ${new Date(discordCfg.lastSync).toLocaleString('pl-PL')} • wiadomości na kanale: ${discordCfg.messageIds.length}`;
+        else                             text = 'Gotowe — regulamin nie był jeszcze wysłany na ten kanał.';
+        if (discordStore === 'local')
+            text += ' • Ustawienia zapisane tylko w tej przeglądarce (Firebase nie pozwala na ścieżkę discordConfig).';
+        return [text, kind];
+    }
+
+    function renderDiscordPanel() {
+        const wh = document.getElementById('dcWebhook');
+        if (!wh) return;
+        if (document.activeElement !== wh) wh.value = discordCfg.webhook || '';
+        document.getElementById('dcSecReg').checked    = !!discordCfg.sections.reg;
+        document.getElementById('dcSecLimits').checked = !!discordCfg.sections.limits;
+        document.getElementById('dcSecCats').checked   = !!discordCfg.sections.cats;
+        document.getElementById('dcAuto').checked      = !!discordCfg.autoSync;
+        document.querySelectorAll('.dc-btn-row button').forEach(b => b.disabled = discordBusy || !discordLoaded);
+        if (!discordBusy) dcSetStatus(...dcIdleStatus());
+    }
+
+    function dcToggleWebhookVisibility() {
+        const wh = document.getElementById('dcWebhook');
+        wh.type = wh.type === 'password' ? 'text' : 'password';
+    }
+
+    let dcToastTimer = null;
+    function dcToast(text, kind, ms) {
+        const el = document.getElementById('dcToast');
+        if (!el) return;
+        el.textContent = text;
+        el.className = 'dc-toast show' + (kind ? ' ' + kind : '');
+        clearTimeout(dcToastTimer);
+        if (kind !== 'busy') dcToastTimer = setTimeout(() => el.classList.remove('show'), ms || 5000);
+    }
+
+    async function dcRun(fn) {
+        discordBusy = true;
+        renderDiscordPanel();
+        try { return await fn(); }
+        finally { discordBusy = false; renderDiscordPanel(); }
+    }
+
+    async function dcCurrentPayload() {
+        if (isAdminMode) return collectAdminPayload();            // treść z edytora (też niezapisana)
+        const snap = await db.ref('taryfikator').once('value');   // awaryjnie: zapisana wersja
+        return snap.val() || {};
+    }
+
+    async function discordSendClick(fresh) {
+        if (discordBusy) return;
+        if (!dcParseWebhook(discordCfg.webhook)) { dcSetStatus('⚠ Najpierw wklej poprawny link webhooka.', 'err'); return; }
+        if (!Object.values(discordCfg.sections).some(Boolean)) { dcSetStatus('⚠ Zaznacz przynajmniej jedną sekcję do wysłania.', 'err'); return; }
+        if (fresh && discordCfg.messageIds.length &&
+            !confirm('Usunąć poprzednio wysłany regulamin z Discorda i opublikować go od nowa na dole kanału?')) return;
+        try {
+            const payload = await dcCurrentPayload();
+            const n = await dcRun(() => syncDiscord(payload, {
+                fresh,
+                onProgress: (i, total) => dcSetStatus(`Wysyłanie na Discorda… ${i}/${total}`, 'busy')
+            }));
+            dcSetStatus(`✓ Regulamin jest na Discordzie (wiadomości: ${n}).`, 'ok');
+        } catch (e) {
+            dcSetStatus('✕ Nie udało się: ' + e.message, 'err');
+        }
+    }
+
+    async function discordDeleteClick() {
+        if (discordBusy) return;
+        const hook = dcParseWebhook(discordCfg.webhook);
+        const ids  = (hook && discordCfg.messagesWebhook === hook.key) ? discordCfg.messageIds.slice() : [];
+        if (!ids.length) { dcSetStatus('Na tym kanale nie ma wysłanego regulaminu do usunięcia.', 'err'); return; }
+        if (!confirm(`Usunąć regulamin z Discorda (wiadomości: ${ids.length})?`)) return;
+        try {
+            await dcRun(async () => {
+                dcSetStatus('Usuwanie wiadomości…', 'busy');
+                await dcDeleteMessages(hook, ids);
+                discordCfg.messageIds = [];
+                discordCfg.lastSync   = null;
+                await saveDiscordConfig();
+            });
+            dcSetStatus('✓ Regulamin usunięty z Discorda.', 'ok');
+        } catch (e) {
+            dcSetStatus('✕ Nie udało się: ' + e.message, 'err');
+        }
+    }
+
+    // wywoływane przez saveAndExitAdmin() po udanym zapisie do Firebase
+    function onRegulaminSaved(payload) {
+        if (!discordCfg.autoSync || !dcParseWebhook(discordCfg.webhook)) return;
+        if (discordBusy) { dcToast('Discord: poprzednia wysyłka jeszcze trwa — pominięto aktualizację.', 'err'); return; }
+        dcToast('Aktualizuję regulamin na Discordzie…', 'busy');
+        dcRun(() => syncDiscord(payload))
+            .then(n  => dcToast(`✓ Regulamin zaktualizowany na Discordzie (wiadomości: ${n}).`, 'ok'))
+            .catch(e => dcToast('✕ Discord: ' + e.message, 'err', 10000));
+    }
+
+    // zmiany w panelu → zapis ustawień
+    document.getElementById('dcWebhook').addEventListener('change', e => {
+        discordCfg.webhook = e.target.value.trim();
+        saveDiscordConfig();
+    });
+    [['dcSecReg', 'reg'], ['dcSecLimits', 'limits'], ['dcSecCats', 'cats']].forEach(([id, key]) => {
+        document.getElementById(id).addEventListener('change', e => {
+            discordCfg.sections[key] = e.target.checked;
+            saveDiscordConfig();
+        });
+    });
+    document.getElementById('dcAuto').addEventListener('change', e => {
+        discordCfg.autoSync = e.target.checked;
+        saveDiscordConfig();
+    });
+
+    // ustawienia Discorda wczytujemy tylko dla zalogowanego admina
+    auth.onAuthStateChanged(user => {
+        if (user) loadDiscordConfig();
+        else { discordCfg = dcDefaultCfg(); discordLoaded = false; renderDiscordPanel(); }
+    });
 </script>
 
 <!-- ════════════════════════════════════════════════════════════════
