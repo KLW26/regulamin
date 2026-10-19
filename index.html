@@ -253,6 +253,8 @@
         .rule-texts { flex: 1; }
         .rule-title { display: block; font-weight: 600; font-size: 0.95rem; color: #e8eaf2; line-height: 1.3; }
         .rule-penalty { display: block; font-size: 0.82rem; font-weight: 500; color: var(--col-muted); margin-top: 2px; letter-spacing: 0.5px; }
+        .rule-penalty .reg-chip { margin-top: 4px; }
+        .rule-penalty .reg-chip:first-child { margin-left: 0; }
 
         /* ── EDIT INPUTS ── */
         .edit-input {
@@ -1215,7 +1217,7 @@
                         const div = document.createElement('div');
                         div.className = 'reg-entry';
                         div.style.position = 'relative';
-                        div.innerHTML = `<span class="reg-entry-dot"></span><div class="reg-entry-text display-only">${escHtml(text)}</div><textarea class="reg-entry-edit reg-entry-textarea">${escHtml(text)}</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button>`;
+                        div.innerHTML = `<span class="reg-entry-dot"></span><div class="reg-entry-text display-only" data-src="${escHtml(text)}">${formatRegEntry(text)}</div><textarea class="reg-entry-edit reg-entry-textarea">${escHtml(text)}</textarea><button class="reg-delete-btn" onclick="this.closest('.reg-entry').remove()">✕</button>`;
                         panel.appendChild(div);
                     }
                 });
@@ -1248,7 +1250,7 @@
                 <div class="rule-dot"></div>
                 <div class="rule-texts">
                     <span class="rule-title">${escHtml(rule.title)}</span>
-                    <span class="rule-penalty">${escHtml(rule.penalty)}</span>
+                    <span class="rule-penalty" data-src="${escHtml(rule.penalty)}">${chipifyPenalties(escHtml(rule.penalty))}</span>
                 </div>
             </div>`).join('');
         return `
@@ -1339,7 +1341,8 @@
             // Make each rule editable
             card.querySelectorAll('.rule-item').forEach(item => {
                 const t = item.querySelector('.rule-title').innerText;
-                const p = item.querySelector('.rule-penalty').innerText;
+                const pEl = item.querySelector('.rule-penalty');
+                const p = pEl.dataset.src !== undefined ? pEl.dataset.src : pEl.innerText;
                 item.innerHTML = `
                     <button class="delete-btn" onclick="this.parentElement.remove()">✕</button>
                     <div class="rule-texts" style="width:100%">
@@ -1643,6 +1646,44 @@
     // ── HELPERS ──
     function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
     function escAttr(s) { return String(s||'').replace(/"/g,'&quot;'); }
+
+    // ── AUTOMATYCZNE CHIPY KAR ──
+    // Wpisy zapisane w Firebase są zwykłym tekstem (z pola edycji w panelu).
+    // Te funkcje zamieniają go na wygląd jak w HTML: kary czasowe, PK i DSQ
+    // jako kolorowe chipy, pogrubiony tytuł przed „:", uwaga z nawiasu po myślniku.
+    const PL_LETTERS = 'A-Za-zĄĆĘŁŃÓŚŹŻąćęłńóśźż';
+    function chipifyPenalties(escaped, lang) {
+        const sec  = lang === 'en' ? 'sec.' : 'sek.';
+        const pk   = lang === 'en' ? 'PP'   : 'PK';
+        const rng  = '(\\d+(?:\\s*[–-]\\s*\\d+)?)';
+        const norm = n => n.replace(/\s*[–-]\s*/, '–');
+        return String(escaped || '')
+            .replace(new RegExp(rng + '\\s*(?:sekund[a-z]*|seconds?|sek\\.?|sec\\.?|s)(?![' + PL_LETTERS + '])', 'g'),
+                     (m, n) => `<span class="reg-chip chip-time">${norm(n)} ${sec}</span>`)
+            .replace(new RegExp(rng + '\\s*(?:PK|PP)(?![' + PL_LETTERS + '])', 'g'),
+                     (m, n) => `<span class="reg-chip chip-pk">${norm(n)} ${pk}</span>`)
+            .replace(/\bDSQ\b/g, '<span class="reg-chip chip-dsq">DSQ</span>')
+            // „5–20s oraz 3–5 PK" / „3 sek. + 1–3 PK" → dwa chipy obok siebie
+            .replace(/(<\/span>)\s*(?:oraz|and|\+|,)?\s*(?=<span class="reg-chip)/g, '$1');
+    }
+    function formatRegEntry(text, lang) {
+        lang = lang || 'pl';
+        const t  = String(text || '').trim();
+        const ci = t.indexOf(':');
+        if (ci > 0 && ci <= 120) {
+            const title = escHtml(t.slice(0, ci).trim());
+            let rest = chipifyPenalties(escHtml(t.slice(ci + 1).trim()), lang)
+                .replace(/^(?:kara|penalty|a penalty of)\s+(?=<span class="reg-chip)/i, '');
+            if (rest.startsWith('<span class="reg-chip')) {
+                rest = rest
+                    .replace(/(<\/span>)\s*\(([^()]*)\)\.?\s*$/, '$1 — $2')   // „(uwaga)" na końcu
+                    .replace(/(<\/span>)\.\s+/, '$1 — ');                     // „DSQ. Wyjątki: …"
+                return `<b>${title}</b> ${rest}`;
+            }
+            return `<b>${title}:</b> ${rest}`;
+        }
+        return chipifyPenalties(escHtml(t), lang);
+    }
 
     // ── DEFAULT DATA ──
     function renderDefaultStructure() {
@@ -2014,6 +2055,23 @@
         });
     }
 
+    // Elementy z chipami budowanymi z tekstu (data-src): tłumaczymy surowy
+    // tekst, a chipy składamy ponownie — już z jednostkami „sec." / „PP".
+    function setFormatted(el, lang, fmt) {
+        const src = el.dataset.src;
+        if (lang === 'pl') { el.innerHTML = fmt(src, 'pl'); return; }
+        const key = src.trim();
+        const known = DICT_HTML[key] || DICT[key];
+        if (known) { el.innerHTML = fmt(known, 'en'); return; }
+        el.innerHTML = fmt(src, 'pl'); // na razie po polsku, dotłumacz w tle
+        getTranslation(key).then(en => {
+            if (currentLang === 'en' && el.dataset.src === src) {
+                withObserverPaused(() => { el.innerHTML = fmt(en, 'en'); });
+            }
+        });
+    }
+    const fmtPenalty = (s, lang) => chipifyPenalties(escHtml(s), lang);
+
     function translateAdminBtn(lang) {
         const btn = document.getElementById('adminBtn');
         if (!btn) return;
@@ -2057,12 +2115,14 @@
 
             document.querySelectorAll('.card .header-text').forEach(el => setPlain(el, lang));
             document.querySelectorAll('.rule-title').forEach(el => setPlain(el, lang));
-            document.querySelectorAll('.rule-penalty').forEach(el => setPlain(el, lang));
+            document.querySelectorAll('.rule-penalty').forEach(el =>
+                el.dataset.src !== undefined ? setFormatted(el, lang, fmtPenalty) : setPlain(el, lang));
             document.querySelectorAll('.limit-pk').forEach(el => setPlain(el, lang));
             document.querySelectorAll('.limit-desc').forEach(el => setPlain(el, lang));
             document.querySelectorAll('.reg-tab-label-display').forEach(el => setPlain(el, lang));
             document.querySelectorAll('.reg-h3-display').forEach(el => setPlain(el, lang));
-            document.querySelectorAll('.reg-entry-text.display-only').forEach(el => setHtml(el, lang));
+            document.querySelectorAll('.reg-entry-text.display-only').forEach(el =>
+                el.dataset.src !== undefined ? setFormatted(el, lang, formatRegEntry) : setHtml(el, lang));
         });
     }
 
